@@ -1,4 +1,4 @@
-# Navigation with Graph of Free Regions
+# FLORES: A Reconfigured Wheel-Legged Robot for Enhanced Steering and Adaptability
 <p align ="center">
 <img src="fig/dof_property.jpg" width=75%>
 </p>
