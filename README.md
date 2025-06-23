@@ -17,7 +17,7 @@ Overview of our system architecture and training pipeline. The training process 
 </p>
 
 ## Mechanical parts
-All machined parts are manufactured with outsourced CNC service. The .stl file of all the parts can be found in Mechanical folder.
+All machined parts are manufactured with outsourced CNC service. The .stl file of all the parts can be found in [here](https://github.com/ZhichengSong6/FLORES-A-Reconfigured-Wheel-Legged-Robot-for-Enhanced-Steering-and-Adaptability/tree/main/Mechanical).
 
 
 ## Authors
