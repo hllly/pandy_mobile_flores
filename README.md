@@ -13,7 +13,7 @@ Overview of our system architecture and training pipeline. The training process 
 
 ## Results
 
-### FLORES Navigating on Various Terraions
+### FLORES Navigating on Various Terrains
 <p align ="center">
 <img src="fig/terrain1_2x.gif" width=75%>
 </p>
