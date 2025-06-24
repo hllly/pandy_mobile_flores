@@ -36,6 +36,20 @@ Overview of our system architecture and training pipeline. The training process 
 </p>
 
 ### FLORES and B2W Perform Stright-line Motion
+
+command speed = 0.5 m/s
+<p align ="center">
+<img src="fig/Discrete_0.5_2x.gif" width=75%>
+</p>
+<p align ="center">
+<img src="fig/Grassland_0.5_2x.gif" width=75%>
+</p>
+<p align ="center">
+<img src="fig/Gravels_0.5_2x.gif" width=75%>
+</p>
+<p align ="center">
+<img src="fig/PavedGround_0.5_2x.gif" width=75%>
+</p>
 command speed = 1.0 m/s
 <p align ="center">
 <img src="fig/Discrete_1.0.gif" width=75%>
@@ -47,7 +61,7 @@ command speed = 1.0 m/s
 <img src="fig/Gravels_1.0.gif" width=75%>
 </p>
 <p align ="center">
-<img src="fig/PaveGround_1.0.gif" width=75%>
+<img src="fig/PavedGround_1.0.gif" width=75%>
 </p>
 
 command speed = 1.5 m/s
@@ -61,7 +75,7 @@ command speed = 1.5 m/s
 <img src="fig/Gravels_1.5.gif" width=75%>
 </p>
 <p align ="center">
-<img src="fig/PaveGround_1.5.gif" width=75%>
+<img src="fig/PavedGround_1.5.gif" width=75%>
 </p>
 
 ### FLORES and B2W Perform Turning Maneuver
@@ -89,6 +103,7 @@ radius = 2.0m
 <p align ="center">
 <img src="fig/PathFollowing_B2W.gif" width=75%>
 </p>
+
 ## Mechanical parts
 All machined parts are manufactured with outsourced CNC service. The .stl file of all the parts can be found in Mechanical floder.
 
