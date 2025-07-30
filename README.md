@@ -104,9 +104,14 @@ radius = 2.0m
 <img src="fig/PathFollowing_B2W.gif" width=75%>
 </p>
 
-## Mechanical parts
+## Mechanical Parts
 All machined parts are manufactured with outsourced CNC service. The .stl file of all the parts can be found in Mechanical floder.
 
+## Hardware Device
+All hardware device installed in FLORES can be found in the table below.
+<p align ="center">
+<img src="fig/Hardware_Device_List.png" width=75%>
+</p>
 
 ## Authors
 
