@@ -51,7 +51,7 @@ sudo apt install ros-humble-ros2-controllers
     ```
 
 ### Install Mujuco
-1. please infer to [unitree_mujoco](https://github.com/unitreerobotics/unitree_mujoco) for C++ version installation details.
+1. please refer to [unitree_mujoco](https://github.com/unitreerobotics/unitree_mujoco) for C++ version installation details.
 2. Copy [mdog](xml/mdog) file to the `unitree_mujoco/unitree_robots"` file.
 3. Change to `robot:"mdog"` type in `unitree_mujoco/simulate/config.yaml`
 
