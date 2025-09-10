@@ -3,8 +3,8 @@
 This package contains a simple PD controller for the leg joints of the quadruped robot. By using this controller, other ros2-control based on position control can also work on the hardware interface which only contain effort control (for example, gazebo ros2 control).
 
 Tested environment:
-* Ubuntu 24.04
-  * ROS2 Jazzy
+* Ubuntu 22.04
+  * ROS2 Humble
 
 ## 1. Interfaces
 

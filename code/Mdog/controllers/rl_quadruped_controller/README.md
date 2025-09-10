@@ -3,9 +3,8 @@
 This repository contains the reinforcement learning based controllers for the quadruped robot.
 
 Tested environment:
-* Ubuntu 24.04
-    * ROS2 Jazzy
-
+* Ubuntu 22.04
+  * ROS2 Humble
 
 ## 2. Build
 ### 2.1 Installing libtorch
@@ -33,18 +32,5 @@ colcon build --packages-up-to rl_quadruped_controller
 
 ```bash
 source ~/ros2_ws/install/setup.bash
-ros2 launch rl_quadruped_controller mujoco.launch.py pkg_description:=go2_description
-```
-
-### 3.2 Gazebo Classic 11 (ROS2 Humble)
-```bash
-source ~/ros2_ws/install/setup.bash
-ros2 launch rl_quadruped_controller gazebo_classic.launch.py pkg_description:=a1_description
-```
-
-
-### 3.3 Gazebo Harmonic (ROS2 Jazzy)
-```bash
-source ~/ros2_ws/install/setup.bash
-ros2 launch rl_quadruped_controller gazebo.launch.py pkg_description:=go2_description
+ros2 launch rl_quadruped_controller mujoco.launch.py
 ```
