@@ -61,7 +61,7 @@ sudo apt install ros-humble-ros2-controllers
    cd ~/{unitree_mujoco}/simulate/build
    ./unitree_mujoco
    ```
-2. Launch the rl_controller
+2. Open another terminal and launch the rl_controller
    ```bash
    cd ~/ros2_ws
    source install/setup.bash 
