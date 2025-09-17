@@ -1,5 +1,5 @@
 <mujoco model="mdog">
-  <compiler angle="radian" meshdir="/home/malab/XJL/urdf/mdog_mujoco/meshes/"/>
+  <compiler angle="radian" meshdir="meshes"/>
   <option cone="elliptic" impratio="100"/>
   
   <asset>

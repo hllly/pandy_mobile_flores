@@ -1,6 +1,6 @@
 <mujoco model="mdog scene">
   <include file="mdog.xml"/>
-  <compiler angle="radian" meshdir="/home/malab/XJL/urdf/mdog_mujoco/meshes/"/>
+  <compiler angle="radian" meshdir="meshes/"/>
 
   <statistic center="0 0 0.1" extent="0.8"/>
 
