@@ -1,5 +1,5 @@
 //
-// Created by biao on 24-9-9.
+// 由 pj 于 24-9-9 创建。
 //
 
 #include "hardware_unitree_mujoco/HardwareUnitree.h"
@@ -45,7 +45,7 @@ rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn Hardwa
                 TOPIC_LOWCMD);
     low_cmd_publisher_->InitChannel();
 
-    /*create subscriber*/
+    /* 创建订阅器 */
     lows_tate_subscriber_ =
             std::make_shared<ChannelSubscriber<unitree_go::msg::dds_::LowState_> >(
                 TOPIC_LOWSTATE);
@@ -99,13 +99,13 @@ std::vector<hardware_interface::StateInterface> HardwareUnitree::export_state_in
         state_interfaces.emplace_back(joint_name, "error", &joint_error_[ind++]);
     }
 
-    // export imu sensor state interface
+    // 导出 IMU 传感器状态接口
     for (uint i = 0; i < info_.sensors[0].state_interfaces.size(); i++) {
         state_interfaces.emplace_back(
             info_.sensors[0].name, info_.sensors[0].state_interfaces[i].name, &imu_states_[i]);
     }
 
-    // export foot force sensor state interface
+    // 导出足端力传感器状态接口
     // for (uint i = 0; i < info_.sensors[1].state_interfaces.size(); i++) {
     //     state_interfaces.emplace_back(
     //         info_.sensors[1].name, info_.sensors[1].state_interfaces[i].name, &foot_force_[i]);
@@ -138,8 +138,8 @@ std::vector<hardware_interface::CommandInterface> HardwareUnitree::export_comman
     return command_interfaces;
 }
 
-return_type HardwareUnitree::read(const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/) {
-    // joint states
+return_type HardwareUnitree::read(const rclcpp::Time & /*时间*/, const rclcpp::Duration & /*周期*/) {
+    // 关节状态
     for (int i(0); i < 16; ++i) {
         joint_position_[i] = low_state_.motor_state()[i].q();
         joint_velocities_[i] = low_state_.motor_state()[i].dq();
@@ -147,11 +147,11 @@ return_type HardwareUnitree::read(const rclcpp::Time & /*time*/, const rclcpp::D
         // std::cout<<"joint_position_["<<i<<"] : "<<joint_position_[i]<<std::endl;
     }
 
-    // imu states
-    imu_states_[0] = low_state_.imu_state().quaternion()[0]; // w
-    imu_states_[1] = low_state_.imu_state().quaternion()[1]; // x
-    imu_states_[2] = low_state_.imu_state().quaternion()[2]; // y
-    imu_states_[3] = low_state_.imu_state().quaternion()[3]; // z
+    // IMU 状态
+    imu_states_[0] = low_state_.imu_state().quaternion()[0]; // w 分量
+    imu_states_[1] = low_state_.imu_state().quaternion()[1]; // x 分量
+    imu_states_[2] = low_state_.imu_state().quaternion()[2]; // y 分量
+    imu_states_[3] = low_state_.imu_state().quaternion()[3]; // z 分量
     imu_states_[4] = low_state_.imu_state().gyroscope()[0];
     imu_states_[5] = low_state_.imu_state().gyroscope()[1];
     imu_states_[6] = low_state_.imu_state().gyroscope()[2];
@@ -159,7 +159,7 @@ return_type HardwareUnitree::read(const rclcpp::Time & /*time*/, const rclcpp::D
     imu_states_[8] = low_state_.imu_state().accelerometer()[1];
     imu_states_[9] = low_state_.imu_state().accelerometer()[2];
 
-    // contact states
+    // 足端接触状态
     foot_force_[0] = low_state_.foot_force()[0];
     foot_force_[1] = low_state_.foot_force()[1];
     foot_force_[2] = low_state_.foot_force()[2];
@@ -172,7 +172,7 @@ return_type HardwareUnitree::read(const rclcpp::Time & /*time*/, const rclcpp::D
     }
     low_state_debug_publisher_->publish(Low_state_debug_);
 
-    // sport mode state
+    // 运动模式状态
     high_state_debug_.pose.pose.position.x = sport_mode_state_.position()[0];
     high_state_debug_.pose.pose.position.y = sport_mode_state_.position()[1];
     high_state_debug_.pose.pose.position.z = sport_mode_state_.position()[2];
@@ -188,9 +188,9 @@ return_type HardwareUnitree::read(const rclcpp::Time & /*time*/, const rclcpp::D
     return return_type::OK;
 }
 
-return_type HardwareUnitree::write(const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/) {
-    // send command
-    //FL FR RL RR low_cmd_.motor_cmd()
+return_type HardwareUnitree::write(const rclcpp::Time & /*时间*/, const rclcpp::Duration & /*周期*/) {
+    // 下发控制指令
+    // 遍历 FL、FR、RL、RR 顺序的 motor_cmd()
     for (int i(0); i < 16; ++i) {
         low_cmd_.motor_cmd()[i].mode() = 0x01;
         low_cmd_.motor_cmd()[i].q() = static_cast<float>(joint_position_command_[i]);
@@ -225,7 +225,7 @@ void HardwareUnitree::initLowCmd() {
 
     for (int i = 0; i < 20; i++) {
         low_cmd_.motor_cmd()[i].mode() =
-                0x01; // motor switch to servo (PMSM) mode
+                0x01; // 电机切换为伺服（PMSM）模式
         low_cmd_.motor_cmd()[i].q() = 0;
         low_cmd_.motor_cmd()[i].kp() = 0;
         low_cmd_.motor_cmd()[i].dq() = 0;

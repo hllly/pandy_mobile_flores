@@ -4,7 +4,7 @@
   <name>hardware_unitree_mujoco</name>
   <version>0.0.0</version>
   <description>TODO: Package description</description>
-  <maintainer email="biao876990970@hotmail.com">biao</maintainer>
+  <maintainer email="pj876990970@hotmail.com">pj</maintainer>
   <license>Apache-2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>

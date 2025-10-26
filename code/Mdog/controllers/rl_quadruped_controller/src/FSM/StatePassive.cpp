@@ -1,5 +1,5 @@
 //
-// Created by tlab-uav on 24-9-6.
+// 由 pj 于 24-9-6 创建。
 //
 
 #include "rl_quadruped_controller/FSM/StatePassive.h"

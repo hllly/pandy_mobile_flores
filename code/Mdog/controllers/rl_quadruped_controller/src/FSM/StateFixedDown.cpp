@@ -1,5 +1,5 @@
 //
-// Created by tlab-uav on 24-9-11.
+// 由 pj 于 24-9-11 创建。
 //
 
 #include "rl_quadruped_controller/FSM/StateFixedDown.h"
@@ -34,7 +34,7 @@ void StateFixedDown::enter() {
 
         std::string joint_name = ctrl_comp_.joint_position_command_interface_[i].get().get_name();
 
-        if(joint_name.find("ankle_joint") != std::string::npos){//if ankle joint, set kp to 0,kd to 1
+        if(joint_name.find("ankle_joint") != std::string::npos){// 若为踝关节，则设置 kp=0、kd=1
             ctrl_comp_.joint_kp_command_interface_[i].get().set_value(0);
             ctrl_comp_.joint_kd_command_interface_[i].get().set_value(1);
         }else{

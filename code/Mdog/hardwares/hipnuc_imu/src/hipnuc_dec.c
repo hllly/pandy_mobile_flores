@@ -1,7 +1,7 @@
 #include "hipnuc.h"
 
 
-/* legcy support of HI226/HI229 */
+/* HI226/HI229 的旧版兼容支持 */
 #define HIPNUC_ID_USRID         (0x90)
 #define HIPNUC_ID_ACC_RAW       (0xA0)
 #define HIPNUC_ID_ACC_CAL       (0xA1)
@@ -12,7 +12,7 @@
 #define HIPNUC_ID_QUAT          (0xD1)
 #define HIPNUC_ID_PRS           (0xF0)
 
-/* new HiPNUC standard packet */
+/* HiPNUC 标准协议的新报文 */
 #define HIPNUC_ID_IMUSOL        (0x91)
 #define HIPNUC_ID_IMUBIN        (0x92)
 #define HIPNUC_ID_INSSOL        (0x81)
@@ -32,7 +32,7 @@
 
 static void hipnuc_crc16(uint16_t *inital, const uint8_t *buf, uint32_t len);
 
-/* common type conversion */
+/* 常见的类型转换宏 */
 #define I2(p) (*((int16_t *)(p)))
 static uint16_t U2(uint8_t *p)
 {
@@ -48,13 +48,13 @@ static float R4(uint8_t *p)
     return r;
 }
 
-/* parse the payload of a frame and feed into data section */
+/* 解析帧的负载并写入数据结构 */
 static int parse_data(hipnuc_raw_t *raw)
 {
     int ofs = 0;
     uint8_t *p = &raw->buf[CH_HDR_SIZE];
     
-    /* ignore all previous data */
+    /* 清空此前的数据 */
     raw->hi91.tag = 0;
     raw->hi81.tag = 0;
     raw->hi92.tag = 0;
@@ -133,7 +133,7 @@ static int decode_hipnuc(hipnuc_raw_t *raw)
 {
     uint16_t crc = 0;
 
-    /* checksum */
+    /* 校验和 */
     hipnuc_crc16(&crc, raw->buf, (CH_HDR_SIZE-2));
     hipnuc_crc16(&crc, raw->buf + CH_HDR_SIZE, raw->len);
     if (crc != U2(raw->buf + (CH_HDR_SIZE-2)))
@@ -145,7 +145,7 @@ static int decode_hipnuc(hipnuc_raw_t *raw)
     return parse_data(raw);
 }
 
-/* sync code */
+/* 同步码 */
 static int sync_hipnuc(uint8_t *buf, uint8_t data)
 {
     buf[0] = buf[1];
@@ -154,16 +154,16 @@ static int sync_hipnuc(uint8_t *buf, uint8_t data)
 }
 
 /**
-* @brief     hipnuc decoder input, read one byte at one time.
+* @brief     hipnuc 解码器输入，每次读取一个字节。
  *
- * @param    raw is the decoder struct.
- * @param    data is the one byte read from stram.
- * @param    buf is the log string buffer, ireturn > 0: decoder received a frame successfully, else: receiver not receive a frame successfully.
+ * @param    raw 解码器结构体。
+ * @param    data 从数据流读取的单字节。
+ * @param    buf 日志字符串缓冲区，返回值 > 0 表示成功接收一帧，否则表示未成功接收。
  *
  */
 int hipnuc_input(hipnuc_raw_t *raw, uint8_t data)
 {
-    /* synchronize frame */
+    /* 同步帧 */
     if (raw->nbyte == 0)
     {
         if (!sync_hipnuc(raw->buf, data))
@@ -196,11 +196,11 @@ int hipnuc_input(hipnuc_raw_t *raw, uint8_t data)
 
 
 /**
- * @brief    convert packet to string, only dump parts of data
+ * @brief    将数据包转换为字符串，仅输出部分字段
  *
- * @param    raw is struct of decoder
- * @param    buf is the log string buffer, make sure buf larger than 256
- * @param    buf_size is the szie of the log buffer
+ * @param    raw 解码器结构体
+ * @param    buf 日志字符串缓冲区，需确保大于 256
+ * @param    buf_size 日志缓冲区长度
  *
  */
 int hipnuc_dump_packet(hipnuc_raw_t *raw, char *buf, size_t buf_size)
@@ -208,7 +208,7 @@ int hipnuc_dump_packet(hipnuc_raw_t *raw, char *buf, size_t buf_size)
     int written = 0;
     int ret;
 
-    /* dump 0x91 packet */
+    /* 输出 0x91 报文内容 */
     if(raw->hi91.tag == HIPNUC_ID_IMUSOL)
     {
         ret = snprintf(buf + written, buf_size - written, "%-16s0x%X\r\n", "tag:", raw->hi91.tag);
@@ -233,7 +233,7 @@ int hipnuc_dump_packet(hipnuc_raw_t *raw, char *buf, size_t buf_size)
         if (ret > 0) written += ret;
     }
     
-    /* dump 0x92 packet */
+    /* 输出 0x92 报文内容 */
     if(raw->hi92.tag == HIPNUC_ID_IMUBIN)
     {
         ret = snprintf(buf + written, buf_size - written, "%-16s0x%X\r\n", "tag:", raw->hi92.tag);
@@ -258,7 +258,7 @@ int hipnuc_dump_packet(hipnuc_raw_t *raw, char *buf, size_t buf_size)
         if (ret > 0) written += ret;
     }
 
-    /* dump 0x81 packet */
+    /* 输出 0x81 报文内容 */
     if(raw->hi81.tag == HIPNUC_ID_INSSOL)
     {
         ret = snprintf(buf + written, buf_size - written, "%-16s0x%X\r\n", "tag:", raw->hi81.tag);
@@ -293,11 +293,11 @@ int hipnuc_dump_packet(hipnuc_raw_t *raw, char *buf, size_t buf_size)
 }
 
 /**
- * @brief    calcuate hipnuc_crc16
+ * @brief    计算 hipnuc_crc16
  *
- * @param    inital is intial value
- * @param    buf    is input buffer pointer
- * @param    len    is length of the buffer
+ * @param    inital 初始值
+ * @param    buf    输入缓冲区指针
+ * @param    len    缓冲区长度
  *
  */
 static void hipnuc_crc16(uint16_t *inital, const uint8_t *buf, uint32_t len)

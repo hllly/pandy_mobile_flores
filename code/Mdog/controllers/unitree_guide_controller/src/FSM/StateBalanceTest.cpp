@@ -1,5 +1,5 @@
 //
-// Created by tlab-uav on 24-9-16.
+// 由 pj 于 24-9-16 创建。
 //
 
 #include "unitree_guide_controller/FSM/StateBalanceTest.h"
@@ -73,14 +73,14 @@ void StateBalanceTest::calcTorque() {
     const Vec3 pose_body = estimator_->getPosition();
     const Vec3 vel_body = estimator_->getVelocity();
 
-    // expected body acceleration
+    // 期望的机体线加速度
     dd_pcd_ = Kp_p_ * (pcd_ - pose_body) + Kd_p_ * (Vec3(0, 0, 0) - vel_body);
 
-    // expected body angular acceleration
+    // 期望的机体角加速度
     d_wbd_ = kp_w_ * rotMatToExp(Rd_ * G2B_Rotation) +
              Kd_w_ * (Vec3(0, 0, 0) - estimator_->getGyroGlobal());
 
-    // calculate foot force
+    // 计算足端受力
     const Vec34 pos_feet_2_body_global = estimator_->getFeetPos2Body();
     const Vec34 force_feet_global = -balance_ctrl_->calF(dd_pcd_, d_wbd_, B2G_Rotation,
                                                         pos_feet_2_body_global, wave_generator_->contact_);

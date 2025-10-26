@@ -1,5 +1,5 @@
 //
-// Created by biao on 24-10-6.
+// 由 pj 于 24-10-6 创建。
 //
 
 #include "rl_quadruped_controller/FSM/StateRL.h"
@@ -46,9 +46,9 @@ StateRL::StateRL(CtrlComponent &ctrl_component, const std::string &config_path,
         init_pos_[i] = target_pos[i];
     }
 
-    // read params from yaml
+    // 从 YAML 中读取参数
     loadYaml(config_path);
-    // history
+    // 历史数据
     if (!params_.observations_history.empty()) {
         history_obs_buf_ = std::make_shared<ObservationBuffer>(1, params_.num_observations,
                                                                params_.observations_history.size());
@@ -93,7 +93,7 @@ StateRL::StateRL(CtrlComponent &ctrl_component, const std::string &config_path,
 }
 
 void StateRL::enter() {
-    // Init observations
+    // 初始化观测量
     obs_.lin_vel = torch::tensor({{0.0, 0.0, 0.0}});
     obs_.ang_vel = torch::tensor({{0.0, 0.0, 0.0}});
     obs_.gravity_vec = torch::tensor({{0.0, 0.0, -1.0}});
@@ -103,12 +103,12 @@ void StateRL::enter() {
     obs_.dof_vel = torch::zeros({1, params_.num_of_dofs});
     obs_.actions = torch::zeros({1, params_.num_of_dofs});
 
-    // Init output
+    // 初始化输出缓存
     output_torques = torch::zeros({1, params_.num_of_dofs});
     output_dof_pos_ = params_.default_dof_pos;
     output_dof_vel_ = torch::zeros({1, params_.num_of_dofs});
 
-    // Init control
+    // 初始化控制指令
     control_.x = 0.0;
     control_.y = 0.0;
     control_.yaw = 0.0;
@@ -180,7 +180,7 @@ torch::Tensor StateRL::computeObservation() {
             // std::cout<<"obs_.command : "<<obs_.commands<<std::endl;
             obs_list.push_back(obs_.commands * params_.commands_scale);
         } else if (observation == "dof_pos") {
-            //create a copy of dof_pos
+            // 创建 dof_pos 的副本
             at::Tensor dof_pos_copy = obs_.dof_pos.clone();
             dof_pos_copy.index_put_({0, 3}, 0); 
             dof_pos_copy.index_put_({0, 7}, 0);  

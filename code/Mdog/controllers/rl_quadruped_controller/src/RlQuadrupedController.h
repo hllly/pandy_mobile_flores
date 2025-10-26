@@ -1,5 +1,5 @@
 //
-// Created by tlab-uav on 24-10-4.
+// 由 pj 于 24-10-4 创建。
 //
 
 #ifndef LEGGEDGYMCONTROLLER_H
@@ -77,14 +77,14 @@ namespace rl_quadruped_controller {
 
         std::string command_prefix_;
 
-        // IMU Sensor
+        // IMU 传感器
         std::string imu_name_;
         std::vector<std::string> imu_interface_types_;
-        // Foot Force Sensor
+        // 足端力传感器
         std::string foot_force_name_;
         std::vector<std::string> foot_force_interface_types_;
 
-        // FR FL RR RL
+        // 顺序：FR FL RR RL（右前、左前、右后、左后）
         // std::vector<double> stand_pos_ = {
         //     0.0, 0.67, -1.3,
         //     0.0, 0.67, -1.3,
@@ -92,7 +92,7 @@ namespace rl_quadruped_controller {
         //     0.0, 0.67, -1.3
         // };
 
-        //FL FR RL RR
+        // 顺序：FL FR RL RR（左前、右前、右后、左后）
         std::vector<double> stand_pos_ = {
             0.0, 0.8, 0.5, 1,
             0.0, -0.8, -0.5, -1,

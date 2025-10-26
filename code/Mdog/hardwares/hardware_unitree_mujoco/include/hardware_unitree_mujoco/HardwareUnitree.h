@@ -1,5 +1,5 @@
 //
-// Created by biao on 24-9-9.
+// 由 pj 于 24-9-9 创建。
 //
 
 
@@ -30,7 +30,7 @@ public:
 
     hardware_interface::return_type read(const rclcpp::Time &time, const rclcpp::Duration &period) override;
 
-    hardware_interface::return_type write(const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/) override;
+    hardware_interface::return_type write(const rclcpp::Time & /*时间*/, const rclcpp::Duration & /*周期*/) override;
 
 protected:
     std::vector<double> joint_torque_command_;
@@ -60,13 +60,13 @@ protected:
     void lowStateMessageHandle(const void *messages);
     void SportModeStateMessageHandle(const void *messages);
 
-    unitree_go::msg::dds_::LowCmd_ low_cmd_{}; // default init
-    unitree_go::msg::dds_::LowState_ low_state_{}; // default init
-    unitree_go::msg::dds_::SportModeState_ sport_mode_state_{}; // default init
+    unitree_go::msg::dds_::LowCmd_ low_cmd_{}; // 默认初始化
+    unitree_go::msg::dds_::LowState_ low_state_{}; // 默认初始化
+    unitree_go::msg::dds_::SportModeState_ sport_mode_state_{}; // 默认初始化
 
-    /*publisher*/
+    /* 发布器 */
     unitree::robot::ChannelPublisherPtr<unitree_go::msg::dds_::LowCmd_> low_cmd_publisher_;
-    /*subscriber*/
+    /* 订阅器 */
     unitree::robot::ChannelSubscriberPtr<unitree_go::msg::dds_::LowState_> lows_tate_subscriber_;
     unitree::robot::ChannelSubscriberPtr<unitree_go::msg::dds_::SportModeState_> sport_mode_state_subscriber_;
 

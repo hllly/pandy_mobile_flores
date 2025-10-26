@@ -1,5 +1,5 @@
 //
-// Created by biao on 24-9-14.
+// 由 pj 于 24-9-14 创建。
 //
 
 #include "unitree_guide_controller/control/Estimator.h"
@@ -157,15 +157,15 @@ void Estimator::update() {
     foot_vels_ = robot_model_->getFeet2BVelocities();
     feet_h_.setZero();
 
-    // Adjust the covariance based on foot contact and phase.
+    // 根据足端触地状态与相位调整协方差。
     for (int i(0); i < 4; ++i) {
         if (wave_generator_->contact_[i] == 0) {
-            // foot not contact
+            // 足端未接触地面
             Q.block(6 + 3 * i, 6 + 3 * i, 3, 3) = large_variance_ * Eigen::MatrixXd::Identity(3, 3);
             R.block(12 + 3 * i, 12 + 3 * i, 3, 3) = large_variance_ * Eigen::MatrixXd::Identity(3, 3);
             R(24 + i, 24 + i) = large_variance_;
         } else {
-            // foot contact
+            // 足端接触地面
             const double trust = windowFunc(wave_generator_->phase_[i], 0.2);
             Q.block(6 + 3 * i, 6 + 3 * i, 3, 3) =
                     (1 + (1 - trust) * large_variance_) *
@@ -199,10 +199,10 @@ void Estimator::update() {
     x_hat_ = A * x_hat_ + B * u_;
     y_hat_ = C * x_hat_;
 
-    // Update the measurement value
+    // 更新量测值
     y_ << feet_pos_body_, feet_vel_body_, feet_h_;
 
-    // Update the covariance matrix
+    // 更新协方差矩阵
     Ppriori = A * P * A.transpose() + Q;
     S = R + C * Ppriori * C.transpose();
     Slu = S.lu();
@@ -212,12 +212,12 @@ void Estimator::update() {
     STC = S.transpose().lu().solve(C);
     IKC = Eigen::MatrixXd::Identity(18, 18) - Ppriori * C.transpose() * Sc;
 
-    // Update the state and covariance matrix
+    // 更新状态与协方差矩阵
     x_hat_ += Ppriori * C.transpose() * Sy;
     P = IKC * Ppriori * IKC.transpose() +
         Ppriori * C.transpose() * SR * STC * Ppriori.transpose();
 
-    // // Using low pass filter to smooth the velocity
+    // 使用低通滤波器平滑速度
     low_pass_filters_[0]->addValue(x_hat_(3));
     low_pass_filters_[1]->addValue(x_hat_(4));
     low_pass_filters_[2]->addValue(x_hat_(5));

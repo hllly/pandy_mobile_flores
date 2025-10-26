@@ -1,13 +1,13 @@
 /*
-File $Id: QuadProg++.cc 232 2007-06-21 12:29:00Z digasper $
+文件 $Id: QuadProg++.cc 232 2007-06-21 12:29:00Z digasper $
 
- Author: Luca Di Gaspero
- DIEGM - University of Udine, Italy
+ 作者：Luca Di Gaspero
+ DIEGM - 乌迪内大学（意大利）
  luca.digaspero@uniud.it
  http://www.diegm.uniud.it/digaspero/
 
- This software may be modified and distributed under the terms
- of the MIT license.  See the LICENSE file for details.
+ 本软件可依据 MIT 许可证条款进行修改与分发，
+ 详情参阅 LICENSE 文件。
 
  */
 
@@ -22,7 +22,7 @@ File $Id: QuadProg++.cc 232 2007-06-21 12:29:00Z digasper $
 
 namespace quadprogpp {
 
-// Utility functions for updating some data needed by the solution method
+// 更新求解过程中所需数据的辅助函数
 void compute_d(Vector<double> &d, const Matrix<double> &J,
                const Vector<double> &np);
 
@@ -39,8 +39,7 @@ void delete_constraint(Matrix<double> &R, Matrix<double> &J, Vector<int> &A,
                        Vector<double> &u, unsigned int n, int p,
                        unsigned int &iq, int l);
 
-// Utility functions for computing the Cholesky decomposition and solving
-// linear systems
+// 计算 Cholesky 分解并求解线性系统的辅助函数
 void cholesky_decomposition(Matrix<double> &A);
 
 void cholesky_solve(const Matrix<double> &L, Vector<double> &x,
@@ -52,20 +51,19 @@ void forward_elimination(const Matrix<double> &L, Vector<double> &y,
 void backward_elimination(const Matrix<double> &U, Vector<double> &x,
                           const Vector<double> &y);
 
-// Utility functions for computing the scalar product and the euclidean
-// distance between two numbers
+// 计算标量积与两数欧氏距离的辅助函数
 double scalar_product(const Vector<double> &x, const Vector<double> &y);
 
 double distance(double a, double b);
 
-// Utility functions for printing vectors and matrices
+// 打印向量与矩阵的辅助函数
 void print_matrix(const char *name, const Matrix<double> &A, int n = -1,
                   int m = -1);
 
 template <typename T>
 void print_vector(const char *name, const Vector<T> &v, int n = -1);
 
-// The Solving function, implementing the Goldfarb-Idnani method
+// 求解函数，实现 Goldfarb-Idnani 方法
 double solve_quadprog(Matrix<double> &G, Vector<double> &g0,
                       const Matrix<double> &CE, const Vector<double> &ce0,
                       const Matrix<double> &CI, const Vector<double> &ci0,
@@ -98,8 +96,8 @@ double solve_quadprog(Matrix<double> &G, Vector<double> &g0,
     throw std::logic_error(msg.str());
   }
   x.resize(n);
-  unsigned int i, j, k, l; /* indices */
-  int ip;  // this is the index of the constraint to be added to the active set
+  unsigned int i, j, k, l; /* 索引 */
+  int ip;  // 待加入活动集的约束索引
   Matrix<double> R(n, n), J(n, n);
   Vector<double> s(m + p), z(n), r(m + p), d(n), np(n), u(m + p), x_old(n),
       u_old(m + p);
@@ -115,8 +113,8 @@ double solve_quadprog(Matrix<double> &G, Vector<double> &g0,
   unsigned int iq, iter = 0;
   Vector<bool> iaexcl(m + p);
 
-  /* p is the number of equality constraints */
-  /* m is the number of inequality constraints */
+  /* p 为等式约束数量 */
+  /* m 为不等式约束数量 */
 #ifdef TRACE_SOLVER
   std::cout << std::endl << "Starting solve_quadprog" << std::endl;
   print_matrix("G", G);
@@ -131,22 +129,22 @@ double solve_quadprog(Matrix<double> &G, Vector<double> &g0,
    * Preprocessing phase
    */
 
-  /* compute the trace of the original matrix G */
+  /* 计算原始矩阵 G 的迹 */
   c1 = 0.0;
   for (i = 0; i < n; i++) {
     c1 += G[i][i];
   }
-  /* decompose the matrix G in the form L^T L */
+  /* 将矩阵 G 分解为 L^T L */
   cholesky_decomposition(G);
 #ifdef TRACE_SOLVER
   print_matrix("G", G);
 #endif
-  /* initialize the matrix R */
+  /* 初始化矩阵 R */
   for (i = 0; i < n; i++) {
     d[i] = 0.0;
     for (j = 0; j < n; j++) R[i][j] = 0.0;
   }
-  R_norm = 1.0; /* this variable will hold the norm of the matrix R */
+  R_norm = 1.0; /* 此变量保存矩阵 R 的范数 */
 
   /* compute the inverse of the factorized matrix G^-1, this is the initial
    * value for H */
@@ -171,14 +169,14 @@ double solve_quadprog(Matrix<double> &G, Vector<double> &g0,
    */
   cholesky_solve(G, x, g0);
   for (i = 0; i < n; i++) x[i] = -x[i];
-  /* and compute the current solution value */
+  /* 并计算当前解的代价 */
   f_value = 0.5 * scalar_product(g0, x);
 #ifdef TRACE_SOLVER
   std::cout << "Unconstrained solution: " << f_value << std::endl;
   print_vector("x", x);
 #endif
 
-  /* Add equality constraints to the working set A */
+  /* 将等式约束加入活动集 A */
   iq = 0;
   for (i = 0; i < p; i++) {
     for (j = 0; j < n; j++) np[j] = CE[j][i];
@@ -196,28 +194,28 @@ double solve_quadprog(Matrix<double> &G, Vector<double> &g0,
       the contraint becomes feasible */
     t2 = 0.0;
     if (fabs(scalar_product(z, z)) >
-        std::numeric_limits<double>::epsilon())  // i.e. z != 0
+        std::numeric_limits<double>::epsilon())  // 即 z != 0
       t2 = (-scalar_product(np, x) - ce0[i]) / scalar_product(z, np);
 
     /* set x = x + t2 * z */
     for (k = 0; k < n; k++) x[k] += t2 * z[k];
 
-    /* set u = u+ */
+    /* 令 u = u+ */
     u[iq] = t2;
     for (k = 0; k < iq; k++) u[k] -= t2 * r[k];
 
-    /* compute the new solution value */
+    /* 计算新的解值 */
     f_value += 0.5 * (t2 * t2) * scalar_product(z, np);
     A[i] = -i - 1;
 
     if (!add_constraint(R, J, d, iq, R_norm)) {
-      // Equality constraints are linearly dependent
+      // 等式约束线性相关
       throw std::runtime_error("Constraints are linearly dependent");
       return f_value;
     }
   }
 
-  /* set iai = K \ A */
+  /* 令 iai = K \ A */
   for (i = 0; i < m; i++) iai[i] = i;
 
 l1:
@@ -225,7 +223,7 @@ l1:
 #ifdef TRACE_SOLVER
   print_vector("x", x);
 #endif
-  /* step 1: choose a violated constraint */
+  /* 步骤 1：选择一个被违反的约束 */
   for (i = p; i < iq; i++) {
     ip = A[i];
     iai[ip] = -1;
@@ -233,8 +231,8 @@ l1:
 
   /* compute s[x] = ci^T * x + ci0 for all elements of K \ A */
   ss = 0.0;
-  psi = 0.0; /* this value will contain the sum of all infeasibilities */
-  ip = 0;    /* ip will be the index of the chosen violated constraint */
+  psi = 0.0; /* 此值存放所有违约的总和 */
+  ip = 0;    /* ip 为所选违约约束的索引 */
   for (i = 0; i < m; i++) {
     iaexcl[i] = true;
     sum = 0.0;
@@ -249,19 +247,19 @@ l1:
 
   if (fabs(psi) <=
       m * std::numeric_limits<double>::epsilon() * c1 * c2 * 100.0) {
-    /* numerically there are not infeasibilities anymore */
+    /* 数值上已无违约约束 */
     return f_value;
   }
 
-  /* save old values for u and A */
+  /* 保存 u 与 A 的旧值 */
   for (i = 0; i < iq; i++) {
     u_old[i] = u[i];
     A_old[i] = A[i];
   }
-  /* and for x */
+  /* 同时保存 x */
   for (i = 0; i < n; i++) x_old[i] = x[i];
 
-l2: /* Step 2: check for feasibility and determine a new S-pair */
+l2: /* 步骤 2：检查可行性并确定新的 S 对 */
   for (i = 0; i < m; i++) {
     if (s[i] < ss && iai[i] != -1 && iaexcl[i]) {
       ss = s[i];
@@ -272,11 +270,11 @@ l2: /* Step 2: check for feasibility and determine a new S-pair */
     return f_value;
   }
 
-  /* set np = n[ip] */
+  /* 令 np = n[ip] */
   for (i = 0; i < n; i++) np[i] = CI[i][ip];
-  /* set u = [u 0]^T */
+  /* 令 u = [u 0]^T */
   u[iq] = 0.0;
-  /* add ip to the active set A */
+  /* 将 ip 加入活动集 A */
   A[iq] = ip;
 
 #ifdef TRACE_SOLVER
@@ -284,13 +282,11 @@ l2: /* Step 2: check for feasibility and determine a new S-pair */
   print_vector("np", np);
 #endif
 
-l2a: /* Step 2a: determine step direction */
-  /* compute z = H np: the step direction in the primal space (through J, see
-   * the paper) */
+l2a: /* 步骤 2a：确定步进方向 */
+  /* 计算 z = H np：原始空间的步进方向（通过 J，详见论文） */
   compute_d(d, J, np);
   update_z(z, J, d, iq);
-  /* compute N* np (if q > 0): the negative of the step direction in the dual
-   * space */
+  /* 计算 N* np（若 q > 0）：对偶空间步进方向的负值 */
   update_r(R, r, d, iq);
 #ifdef TRACE_SOLVER
   std::cout << "Step direction z" << std::endl;
@@ -301,12 +297,11 @@ l2a: /* Step 2a: determine step direction */
   print_vector("A", A, iq + 1);
 #endif
 
-  /* Step 2b: compute step length */
+  /* 步骤 2b：计算步长 */
   l = 0;
-  /* Compute t1: partial step length (maximum step in dual space without
-   * violating dual feasibility */
+  /* 计算 t1：部分步长（在不破坏对偶可行性的情况下，双空间的最大步长） */
   t1 = inf; /* +inf */
-  /* find the index l s.t. it reaches the minimum of u+[x] / r */
+  /* 查找使 u+[x] / r 最小的索引 l */
   for (k = p; k < iq; k++) {
     if (r[k] > 0.0) {
       if (u[k] / r[k] < t1) {
@@ -315,34 +310,32 @@ l2a: /* Step 2a: determine step direction */
       }
     }
   }
-  /* Compute t2: full step length (minimum step in primal space such that the
-   * constraint ip becomes feasible */
+  /* 计算 t2：全步长（在原始空间内使约束 ip 可行的最小步长） */
   if (fabs(scalar_product(z, z)) >
-      std::numeric_limits<double>::epsilon())  // i.e. z != 0
+      std::numeric_limits<double>::epsilon())  // 即 z != 0
   {
     t2 = -s[ip] / scalar_product(z, np);
-    if (t2 < 0)  // patch suggested by Takano Akio for handling numerical
-                 // inconsistencies
+    if (t2 < 0)  // Takano Akio 建议的补丁，用于处理数值不一致
       t2 = inf;
   } else
     t2 = inf; /* +inf */
 
-  /* the step is chosen as the minimum of t1 and t2 */
+  /* 步长取 t1 与 t2 的较小值 */
   t = std::min(t1, t2);
 #ifdef TRACE_SOLVER
   std::cout << "Step sizes: " << t << " (t1 = " << t1 << ", t2 = " << t2
             << ") ";
 #endif
 
-  /* Step 2c: determine new S-pair and take step: */
+  /* 步骤 2c：确定新的 S 对并执行步进 */
 
-  /* case (i): no step in primal or dual space */
+  /* 情况 (i)：原始与对偶空间都不步进 */
   if (t >= inf) {
-    /* QPP is infeasible */
-    // FIXME: unbounded to raise
+    /* QPP 无可行解 */
+    // FIXME：需要抛出无界异常
     return inf;
   }
-  /* case (ii): step in dual space */
+  /* 情况 (ii)：在对偶空间步进 */
   if (t2 >= inf) {
     /* set u = u +  t * [-r 1] and drop constraint l from the active set A */
     for (k = 0; k < iq; k++) u[k] -= t * r[k];
@@ -358,11 +351,11 @@ l2a: /* Step 2a: determine step direction */
     goto l2a;
   }
 
-  /* case (iii): step in primal and dual space */
+  /* 情况 (iii)：原始与对偶空间同时步进 */
 
   /* set x = x + t * z */
   for (k = 0; k < n; k++) x[k] += t * z[k];
-  /* update the solution value */
+  /* 更新解的代价 */
   f_value += t * scalar_product(z, np) * (0.5 * t + u[iq]);
   /* u = u + t * [-r 1] */
   for (k = 0; k < iq; k++) u[k] -= t * r[k];
@@ -380,8 +373,8 @@ l2a: /* Step 2a: determine step direction */
     std::cout << "Full step has taken " << t << std::endl;
     print_vector("x", x);
 #endif
-    /* full step has taken */
-    /* add constraint ip to the active set*/
+    /* 已采取全步进 */
+    /* 将约束 ip 加入活动集 */
     if (!add_constraint(R, J, d, iq, R_norm)) {
       iaexcl[ip] = false;
       delete_constraint(R, J, A, u, n, p, iq, ip);
@@ -397,7 +390,7 @@ l2a: /* Step 2a: determine step direction */
         iai[A[i]] = -1;
       }
       for (i = 0; i < n; i++) x[i] = x_old[i];
-      goto l2; /* go to step 2 */
+      goto l2; /* 返回步骤 2 */
     } else
       iai[ip] = -1;
 #ifdef TRACE_SOLVER
@@ -408,12 +401,12 @@ l2a: /* Step 2a: determine step direction */
     goto l1;
   }
 
-  /* a patial step has taken */
+  /* 已采取部分步进 */
 #ifdef TRACE_SOLVER
   std::cout << "Partial step has taken " << t << std::endl;
   print_vector("x", x);
 #endif
-  /* drop constraint l */
+  /* 移除约束 l */
   iai[l] = l;
   delete_constraint(R, J, A, u, n, p, iq, l);
 #ifdef TRACE_SOLVER
@@ -461,7 +454,7 @@ inline void update_r(const Matrix<double> &R, Vector<double> &r,
   int i, j;
   double sum;
 
-  /* setting of r = R^-1 d */
+  /* 设置 r = R^-1 d */
   for (i = iq - 1; i >= 0; i--) {
     sum = 0.0;
     for (j = i + 1; j < iq; j++) sum += R[i][j] * r[j];
@@ -494,7 +487,7 @@ bool add_constraint(Matrix<double> &R, Matrix<double> &J, Vector<double> &d,
     cc = d[j - 1];
     ss = d[j];
     h = distance(cc, ss);
-    if (fabs(h) < std::numeric_limits<double>::epsilon())  // h == 0
+    if (fabs(h) < std::numeric_limits<double>::epsilon())  // 即 h == 0
       continue;
     d[j] = 0.0;
     ss = ss / h;
@@ -513,7 +506,7 @@ bool add_constraint(Matrix<double> &R, Matrix<double> &J, Vector<double> &d,
       J[k][j] = xny * (t1 + J[k][j - 1]) - t2;
     }
   }
-  /* update the number of constraints added*/
+  /* 更新已添加约束的数量 */
   iq++;
   /* To update R we have to put the iq components of the d vector
     into column iq - 1 of R
@@ -527,7 +520,7 @@ bool add_constraint(Matrix<double> &R, Matrix<double> &J, Vector<double> &d,
 #endif
 
   if (fabs(d[iq - 1]) <= std::numeric_limits<double>::epsilon() * R_norm) {
-    // problem degenerate
+    // 问题退化
     return false;
   }
   R_norm = std::max<double>(R_norm, fabs(d[iq - 1]));
@@ -541,11 +534,11 @@ void delete_constraint(Matrix<double> &R, Matrix<double> &J, Vector<int> &A,
   std::cout << "Delete constraint " << l << ' ' << iq;
 #endif
   unsigned int i, j, k,
-      qq = 0;  // just to prevent warnings from smart compilers
+      qq = 0;  // 仅为避免高级编译器发出警告
   double cc, ss, h, xny, t1, t2;
 
   bool found = false;
-  /* Find the index qq for active constraint l to be removed */
+  /* 找到要移除的活动约束 l 对应的索引 qq */
   for (i = p; i < iq; i++)
     if (A[i] == l) {
       qq = i;
@@ -558,7 +551,7 @@ void delete_constraint(Matrix<double> &R, Matrix<double> &J, Vector<int> &A,
     os << "Attempt to delete non existing constraint, constraint: " << l;
     throw std::invalid_argument(os.str());
   }
-  /* remove the constraint from the active set and the duals */
+  /* 从活动集和对偶变量中移除该约束 */
   for (i = qq; i < iq - 1; i++) {
     A[i] = A[i + 1];
     u[i] = u[i + 1];
@@ -570,7 +563,7 @@ void delete_constraint(Matrix<double> &R, Matrix<double> &J, Vector<int> &A,
   A[iq] = 0;
   u[iq] = 0.0;
   for (j = 0; j < iq; j++) R[j][iq - 1] = 0.0;
-  /* constraint has been fully removed */
+  /* 约束已完全移除 */
   iq--;
 #ifdef TRACE_SOLVER
   std::cout << '/' << iq << std::endl;
@@ -582,7 +575,7 @@ void delete_constraint(Matrix<double> &R, Matrix<double> &J, Vector<int> &A,
     cc = R[j][j];
     ss = R[j + 1][j];
     h = distance(cc, ss);
-    if (fabs(h) < std::numeric_limits<double>::epsilon())  // h == 0
+    if (fabs(h) < std::numeric_limits<double>::epsilon())  // 即 h == 0
       continue;
     cc = cc / h;
     ss = ss / h;
@@ -644,7 +637,7 @@ void cholesky_decomposition(Matrix<double> &A) {
       if (i == j) {
         if (sum <= 0.0) {
           std::ostringstream os;
-          // raise error
+          // 抛出错误
           print_matrix("A", A);
           os << "Error in cholesky decomposition, sum: " << sum;
           throw std::logic_error(os.str());
@@ -707,7 +700,7 @@ void print_matrix(const char *name, const Matrix<double> &A, int n, int m) {
   }
   t = s.str();
   t = t.substr(
-      0, t.size() - 3);  // To remove the trailing space, comma and newline
+      0, t.size() - 3);  // 去掉末尾的空格、逗号和换行
 
   std::cout << t << std::endl;
 }
@@ -723,9 +716,9 @@ void print_vector(const char *name, const Vector<T> &v, int n) {
     s << v[i] << ", ";
   }
   t = s.str();
-  t = t.substr(0, t.size() - 2);  // To remove the trailing space and comma
+  t = t.substr(0, t.size() - 2);  // 去掉末尾的空格和逗号
 
   std::cout << t << std::endl;
 }
 
-}  // namespace quadprogpp
+}  // 命名空间 quadprogpp

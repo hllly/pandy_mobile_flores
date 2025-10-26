@@ -1,5 +1,5 @@
 //
-// Created by biao on 24-9-12.
+// 由 pj 于 24-9-12 创建。
 //
 
 
@@ -22,9 +22,9 @@ public:
     ~QuadrupedRobot() = default;
 
     /**
-     * Calculate the joint positions based on the foot end position
-     * @param pEe_list vector of foot-end position
-     * @return
+     * 根据足端位姿计算所需关节位置。
+     * @param pEe_list 足端位姿列表
+     * @return 对应关节位置
      */
     [[nodiscard]] std::vector<KDL::JntArray> getQ(const std::vector<KDL::Frame> &pEe_list) const;
 
@@ -33,53 +33,53 @@ public:
     Vec12 getQd(const std::vector<KDL::Frame> &pos, const Vec34 &vel);
 
     /**
-     * Calculate the foot end position based on joint positions
-     * @return vector of foot-end position
+     * 根据关节位置计算足端位姿。
+     * @return 足端位姿列表
      */
     [[nodiscard]] std::vector<KDL::Frame> getFeet2BPositions() const;
 
     /**
-     * Calculate the foot end position based on joint positions
-     * @param index leg index
-     * @return foot-end position
+     * 根据关节位置计算单条腿的足端位姿。
+     * @param index 腿索引
+     * @return 足端位姿
      */
     [[nodiscard]] KDL::Frame getFeet2BPositions(int index) const;
 
     /**
-     * Calculate the Jacobian matrix based on joint positions
-     * @param index leg index
-     * @return Jacobian matrix
+     * 根据关节位置计算雅可比矩阵。
+     * @param index 腿索引
+     * @return 雅可比矩阵
      */
     [[nodiscard]] KDL::Jacobian getJacobian(int index) const;
 
     /**
-     * Calculate the torque based on joint positions, joint velocities and external force
-     * @param force external force
-     * @param index leg index
-     * @return torque
+     * 基于关节位置、速度与外力计算关节力矩。
+     * @param force 外部作用力
+     * @param index 腿索引
+     * @return 力矩值
      */
     [[nodiscard]] KDL::JntArray getTorque(
         const Vec3 &force, int index) const;
 
     /**
-    * Calculate the torque based on joint positions, joint velocities and external force
-    * @param force external force
-    * @param index leg index
-    * @return torque
-    */
+     * 基于关节位置、速度与外力计算关节力矩。
+     * @param force 外部作用力
+     * @param index 腿索引
+     * @return 力矩值
+     */
     [[nodiscard]] KDL::JntArray getTorque(
         const KDL::Vector &force, int index) const;
 
     /**
-     * Calculate the foot end velocity
-     * @param index leg index
-     * @return velocity vector
+     * 计算足端速度。
+     * @param index 腿索引
+     * @return 速度向量
      */
     [[nodiscard]] KDL::Vector getFeet2BVelocities(int index) const;
 
     /**
-     * Calculate all foot end velocity
-     * @return list of foot end velocity
+     * 计算全部足端速度。
+     * @return 足端速度列表
      */
     [[nodiscard]] std::vector<KDL::Vector> getFeet2BVelocities() const;
 

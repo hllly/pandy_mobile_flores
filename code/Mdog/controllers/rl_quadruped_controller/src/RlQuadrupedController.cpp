@@ -1,5 +1,5 @@
 //
-// Created by tlab-uav on 24-10-4.
+// 由 pj 于 24-10-4 创建。
 //
 
 #include "RlQuadrupedController.h"
@@ -47,7 +47,7 @@ namespace rl_quadruped_controller {
     }
 
     controller_interface::return_type LeggedGymController::
-    update(const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/) {
+    update(const rclcpp::Time & /*时间*/, const rclcpp::Duration & /*周期*/) {
         if (ctrl_comp_.enable_estimator_) {
             if (ctrl_comp_.robot_model_ == nullptr) {
                 return controller_interface::return_type::OK;
@@ -89,20 +89,20 @@ namespace rl_quadruped_controller {
             command_prefix_ = auto_declare<std::string>("command_prefix", command_prefix_);
             base_name_ = auto_declare<std::string>("base_name", base_name_);
 
-            // imu sensor
+            // IMU 传感器
             imu_name_ = auto_declare<std::string>("imu_name", imu_name_);
             imu_interface_types_ = auto_declare<std::vector<std::string> >("imu_interfaces", state_interface_types_);
 
-            // foot_force_sensor
+            // 足端力传感器
             foot_force_name_ = auto_declare<std::string>("foot_force_name", foot_force_name_);
             foot_force_interface_types_ =
                     auto_declare<std::vector<std::string> >("foot_force_interfaces", foot_force_interface_types_);
 
-            // rl config folder
+            // 强化学习配置目录
             robot_pkg_ = auto_declare<std::string>("robot_pkg", robot_pkg_);
             model_folder_ = auto_declare<std::string>("model_folder", model_folder_);
 
-            // pose parameters
+            // 姿态参数
             down_pos_ = auto_declare<std::vector<double> >("down_pos", down_pos_);
             stand_pos_ = auto_declare<std::vector<double> >("stand_pos", stand_pos_);
             stand_kp_ = auto_declare<double>("stand_kp", stand_kp_);
@@ -124,7 +124,7 @@ namespace rl_quadruped_controller {
     }
 
     controller_interface::CallbackReturn LeggedGymController::on_configure(
-        const rclcpp_lifecycle::State & /*previous_state*/) {
+        const rclcpp_lifecycle::State & /*上一个状态*/) {
         robot_description_subscription_ = get_node()->create_subscription<std_msgs::msg::String>(
             "/robot_description", rclcpp::QoS(rclcpp::KeepLast(1)).transient_local(),
             [this](const std_msgs::msg::String::SharedPtr msg) {
@@ -137,7 +137,7 @@ namespace rl_quadruped_controller {
 
         control_input_subscription_ = get_node()->create_subscription<control_input_msgs::msg::Inputs>(
             "/control_input", 10, [this](const control_input_msgs::msg::Inputs::SharedPtr msg) {
-                // Handle message
+                // 处理消息
                 ctrl_comp_.control_inputs_.command = msg->command;
                 if (ctrl_comp_.control_inputs_.command ==10){
                     use_high_cmd_ = !use_high_cmd_;
@@ -150,7 +150,7 @@ namespace rl_quadruped_controller {
 
         high_input_subscription_ = get_node()->create_subscription<nav_msgs::msg::Odometry>(
             "/HighCmd", 1, [this](const nav_msgs::msg::Odometry::SharedPtr msg) {
-                // Handle message
+                // 处理消息
                 if (use_high_cmd_){
                     ctrl_comp_.control_inputs_.lx = msg->twist.twist.linear.y;
                     ctrl_comp_.control_inputs_.ly = msg->twist.twist.linear.x;
@@ -163,11 +163,11 @@ namespace rl_quadruped_controller {
     }
 
     controller_interface::CallbackReturn LeggedGymController::on_activate(
-        const rclcpp_lifecycle::State & /*previous_state*/) {
-        // clear out vectors in case of restart
+        const rclcpp_lifecycle::State & /*上一个状态*/) {
+        // 避免重启时残留数据，先清空缓存向量
         ctrl_comp_.clear();
 
-        // assign command interfaces
+        // 分配控制指令接口
         for (auto &interface: command_interfaces_) {
             std::string interface_name = interface.get_interface_name();
             if (const size_t pos = interface_name.find('/'); pos != std::string::npos) {
@@ -177,7 +177,7 @@ namespace rl_quadruped_controller {
             }
         }
 
-        // assign state interfaces
+        // 分配状态接口
         for (auto &interface: state_interfaces_) {
             if (interface.get_prefix_name() == imu_name_) {
                 ctrl_comp_.imu_state_interface_.emplace_back(interface);
@@ -188,7 +188,7 @@ namespace rl_quadruped_controller {
             }
         }
 
-        // Create FSM List
+        // 创建有限状态机状态列表
         state_list_.passive = std::make_shared<StatePassive>(ctrl_comp_);
         state_list_.fixedDown = std::make_shared<StateFixedDown>(ctrl_comp_, down_pos_, stand_kp_, stand_kd_);
         state_list_.fixedStand = std::make_shared<StateFixedStand>(ctrl_comp_, stand_pos_, stand_kp_, stand_kd_);
@@ -199,7 +199,7 @@ namespace rl_quadruped_controller {
         std::string model_path = package_share_directory + "/config/" + model_folder_;
         state_list_.rl = std::make_shared<StateRL>(ctrl_comp_, model_path, stand_pos_);
 
-        // Initialize FSM
+        // 初始化有限状态机
         current_state_ = state_list_.passive;
         current_state_->enter();
         next_state_ = current_state_;
@@ -210,7 +210,7 @@ namespace rl_quadruped_controller {
     }
 
     controller_interface::CallbackReturn LeggedGymController::on_deactivate(
-        const rclcpp_lifecycle::State & /*previous_state*/) {
+        const rclcpp_lifecycle::State & /*上一个状态*/) {
         release_interfaces();
         return CallbackReturn::SUCCESS;
     }

@@ -1,12 +1,12 @@
 //
-// Created by tlab-uav on 24-9-6.
+// 由 pj 于 24-9-6 创建。
 //
 
 #ifndef ENUMCLASS_H
 #define ENUMCLASS_H
 
 enum class FSMStateName {
-    // EXIT,
+    // 退出
     INVALID,
     PASSIVE,
     FIXEDDOWN,

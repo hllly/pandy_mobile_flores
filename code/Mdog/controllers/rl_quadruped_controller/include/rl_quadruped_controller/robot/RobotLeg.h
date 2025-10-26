@@ -1,5 +1,5 @@
 //
-// Created by biao on 24-9-12.
+// 由 pj 于 24-9-12 创建。
 //
 
 
@@ -18,32 +18,32 @@ public:
     ~RobotLeg() = default;
 
     /**
-     * Use forward kinematic to calculate the Pose of End effector to Body frame.
-     * @param joint_positions Leg joint positions
-     * @return Pose of End effector to Body frame
+     * 使用正运动学计算末端执行器相对机体坐标系的位姿。
+     * @param joint_positions 腿部关节位置
+     * @return 末端执行器相对机体坐标系的位姿
      */
     [[nodiscard]] KDL::Frame calcPEe2B(const KDL::JntArray &joint_positions) const;
 
     /**
-     * Use inverse kinematic to calculate the joint positions.
-     * @param pEe target position of end effector
-     * @param q_init current joint positions
-     * @return target joint positions
+     * 使用逆运动学求解目标关节位置。
+     * @param pEe 末端执行器目标位姿
+     * @param q_init 当前关节位置
+     * @return 目标关节位置
      */
     [[nodiscard]] KDL::JntArray calcQ(const KDL::Frame &pEe, const KDL::JntArray &q_init) const;
 
     /**
-     * Calculate the current jacobian matrix.
-     * @param joint_positions Leg joint positions
-     * @return jacobian matrix
+     * 计算当前雅可比矩阵。
+     * @param joint_positions 腿部关节位置
+     * @return 雅可比矩阵
      */
     [[nodiscard]] KDL::Jacobian calcJaco(const KDL::JntArray &joint_positions) const;
 
     /**
-     * Calculate the torque based on joint positions and end force
-     * @param joint_positions current joint positions
-     * @param force foot end force
-     * @return joint torque
+     * 根据关节位置与末端受力计算关节力矩。
+     * @param joint_positions 当前关节位置
+     * @param force 足端受力
+     * @return 关节力矩
      */
     [[nodiscard]] KDL::JntArray calcTorque(const KDL::JntArray &joint_positions, const Vec3 &force) const;
 

@@ -1,5 +1,5 @@
 //
-// Created by biao on 24-9-18.
+// 由 pj 于 24-9-18 创建。
 //
 
 #include "unitree_guide_controller/gait/GaitGenerator.h"
@@ -29,13 +29,13 @@ void GaitGenerator::generate(Vec34 &feet_pos, Vec34 &feet_vel) {
     for (int i = 0; i < 4; i++) {
         if (wave_generator_->contact_(i) == 1) {
             if (wave_generator_->phase_(i) < 0.5) {
-                // foot contact the ground
+                // 足端处于支撑阶段
                 start_p_.col(i) = estimator_->getFootPos(i);
             }
             feet_pos.col(i) = start_p_.col(i);
             feet_vel.col(i).setZero();
         } else {
-            // foot not contact, swing
+            // 足端腾空，处于摆动阶段
             end_p_.col(i) = feet_end_calc_.calcFootPos(i, vxy_goal_, d_yaw_goal_, wave_generator_->phase_(i));
             feet_pos.col(i) = getFootPos(i);
             feet_vel.col(i) = getFootVel(i);

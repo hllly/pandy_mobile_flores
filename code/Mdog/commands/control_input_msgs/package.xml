@@ -4,7 +4,7 @@
     <name>control_input_msgs</name>
     <version>0.0.0</version>
     <description>TODO: Package description</description>
-    <maintainer email="biao876990970@hotmail.com">biao</maintainer>
+    <maintainer email="pj876990970@hotmail.com">pj</maintainer>
     <license>Apache-2.0</license>
 
     <buildtool_depend>rosidl_default_generators</buildtool_depend>

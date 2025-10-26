@@ -1,5 +1,5 @@
 //
-// Created by tlab-uav on 24-9-16.
+// 由 pj 于 24-9-16 创建。
 //
 
 #ifndef BALANCECTRL_H
@@ -17,13 +17,12 @@ public:
     ~BalanceCtrl() = default;
 
     /**
-     * Calculate the desired feet end force
-     * @param ddPcd desired body acceleration
-     * @param dWbd desired body angular acceleration
-     * @param rot_matrix current body rotation matrix
-     * @param feet_pos_2_body feet positions to body under world frame
-     * @param contact feet contact
-     * @return
+     * 计算期望的足端作用力。
+     * @param ddPcd 期望的机体线加速度
+     * @param dWbd 期望的机体角加速度
+     * @param rot_matrix 当前机体姿态旋转矩阵
+     * @param feet_pos_2_body 世界系下足端相对机体的位置
+     * @param contact 足端接触状态
      */
     Vec34 calF(const Vec3 &ddPcd, const Vec3 &dWbd, const RotMat &rot_matrix,
                const Vec34 &feet_pos_2_body, const VecInt4 &contact);

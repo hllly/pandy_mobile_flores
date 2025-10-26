@@ -1,5 +1,5 @@
 //
-// Created by biao on 24-9-10.
+// 由 pj 于 24-9-10 创建。
 //
 
 #ifndef STATEFIXEDSTAND_H

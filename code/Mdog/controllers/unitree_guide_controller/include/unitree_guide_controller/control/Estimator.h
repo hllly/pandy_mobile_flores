@@ -1,5 +1,5 @@
 //
-// Created by biao on 24-9-14.
+// 由 pj 于 24-9-14 创建。
 //
 
 #ifndef ESTIMATOR_H
@@ -22,33 +22,29 @@ public:
     ~Estimator() = default;
 
     /**
-     * Get the estimated robot central position
-     * @return robot central position
+     * 获取估计的机体质心位置。
      */
     Vec3 getPosition() {
         return x_hat_.segment(0, 3);
     }
 
     /**
-     * Get the estimated robot central velocity
-     * @return robot central velocity
+     * 获取估计的机体质心速度。
      */
     Vec3 getVelocity() {
         return x_hat_.segment(3, 3);
     }
 
     /**
-     * Get the estimated foot position in world frame
-     * @param index leg index
-     * @return foot position in world frame
+     * 获取世界坐标系下的估计足端位置。
+     * @param index 腿索引
      */
     Vec3 getFootPos(const int index) {
         return getPosition() + rotation_ * Vec3(foot_poses_[index].p.data);
     }
 
     /**
-     * Get the estimated feet velocity in world frame
-     * @return feet velocity in world frame
+     * 获取世界坐标系下的估计足端位置集合。
      */
     Vec34 getFeetPos() {
         Vec34 feet_pos;
@@ -59,8 +55,7 @@ public:
     }
 
     /**
-     * Get the estimated feet velocity in world frame
-     * @return feet velocity in world frame
+     * 获取世界坐标系下的估计足端速度。
      */
     Vec34 getFeetVel() {
         const std::vector<KDL::Vector> feet_vel = robot_model_->getFeet2BVelocities();
@@ -72,8 +67,7 @@ public:
     }
 
     /**
-     * Get the estimated foot position in body frame
-     * @return
+     * 获取机体坐标系下的估计足端位置。
      */
     Vec34 getFeetPos2Body() {
         Vec34 foot_pos;
@@ -109,33 +103,33 @@ private:
     std::shared_ptr<QuadrupedRobot> &robot_model_;
     std::shared_ptr<WaveGenerator> &wave_generator_;
 
-    Eigen::Matrix<double, 18, 1> x_hat_; // The state of estimator, position(3)+velocity(3)+feet position(3x4)
+    Eigen::Matrix<double, 18, 1> x_hat_; // 估计器状态向量：位置(3)+速度(3)+足端位置(3x4)
 
-    Eigen::Matrix<double, 3, 1> u_; // The input of estimator
+    Eigen::Matrix<double, 3, 1> u_; // 估计器输入量
 
-    Eigen::Matrix<double, 28, 1> y_; // The measurement value of output y
-    Eigen::Matrix<double, 28, 1> y_hat_; // The prediction of output y
-    Eigen::Matrix<double, 18, 18> A; // The transtion matrix of estimator
-    Eigen::Matrix<double, 18, 3> B; // The input matrix
-    Eigen::Matrix<double, 28, 18> C; // The output matrix
+    Eigen::Matrix<double, 28, 1> y_; // 输出量的量测值
+    Eigen::Matrix<double, 28, 1> y_hat_; // 输出量的预测值
+    Eigen::Matrix<double, 18, 18> A; // 状态转移矩阵
+    Eigen::Matrix<double, 18, 3> B; // 输入矩阵
+    Eigen::Matrix<double, 28, 18> C; // 输出矩阵
 
-    // Covariance Matrix
-    Eigen::Matrix<double, 18, 18> P; // Prediction covariance
-    Eigen::Matrix<double, 18, 18> Ppriori; // Priori prediction covariance
-    Eigen::Matrix<double, 18, 18> Q; // Dynamic simulation covariance
-    Eigen::Matrix<double, 28, 28> R; // Measurement covariance
-    Eigen::Matrix<double, 18, 18> QInit_; // Initial value of Dynamic simulation covariance
-    Eigen::Matrix<double, 28, 28> RInit_; // Initial value of Measurement covariance
-    Eigen::Matrix<double, 18, 1> Qdig; // adjustable process noise covariance
-    Eigen::Matrix<double, 3, 3> Cu; // The covariance of system input u
+    // 协方差矩阵
+    Eigen::Matrix<double, 18, 18> P; // 预测协方差
+    Eigen::Matrix<double, 18, 18> Ppriori; // 先验预测协方差
+    Eigen::Matrix<double, 18, 18> Q; // 系统噪声协方差
+    Eigen::Matrix<double, 28, 28> R; // 量测噪声协方差
+    Eigen::Matrix<double, 18, 18> QInit_; // 系统噪声协方差初值
+    Eigen::Matrix<double, 28, 28> RInit_; // 量测噪声协方差初值
+    Eigen::Matrix<double, 18, 1> Qdig; // 可调过程噪声协方差
+    Eigen::Matrix<double, 3, 3> Cu; // 输入量 u 的协方差
 
-    // Output Measurement
-    Eigen::Matrix<double, 12, 1> feet_pos_body_; // The feet positions to body, in the global coordinate
-    Eigen::Matrix<double, 12, 1> feet_vel_body_; // The feet velocity to body, in the global coordinate
-    Eigen::Matrix<double, 4, 1> feet_h_; // The Height of each foot, in the global coordinate
+    // 输出量测
+    Eigen::Matrix<double, 12, 1> feet_pos_body_; // 全局坐标下相对机体的足端位置
+    Eigen::Matrix<double, 12, 1> feet_vel_body_; // 全局坐标下相对机体的足端速度
+    Eigen::Matrix<double, 4, 1> feet_h_; // 全局坐标下各足端高度
 
     Eigen::Matrix<double, 28, 28> S; // _S = C*P*C.T + R
-    Eigen::PartialPivLU<Eigen::Matrix<double, 28, 28> > Slu; // _S.lu()
+    Eigen::PartialPivLU<Eigen::Matrix<double, 28, 28> > Slu; // _S 的 LU 分解
     Eigen::Matrix<double, 28, 1> Sy; // _Sy = _S.inv() * (y - yhat)
     Eigen::Matrix<double, 28, 18> Sc; // _Sc = _S.inv() * C
     Eigen::Matrix<double, 28, 28> SR; // _SR = _S.inv() * R

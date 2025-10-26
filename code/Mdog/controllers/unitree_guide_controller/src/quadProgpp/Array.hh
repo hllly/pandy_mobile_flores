@@ -1,10 +1,8 @@
 // $Id: Array.hh 249 2008-11-20 09:58:23Z schaerf $
-// This file is part of EasyLocalpp: a C++ Object-Oriented framework
-// aimed at easing the development of Local Search algorithms.
+// 本文件属于 EasyLocalpp：一个旨在简化局部搜索算法开发的 C++ 面向对象框架。
 // Copyright (C) 2001--2008 Andrea Schaerf, Luca Di Gaspero.
 //
-// This software may be modified and distributed under the terms
-// of the MIT license.  See the LICENSE file for details.
+// 本软件可依据 MIT 许可证的条款进行修改与分发，详情参阅 LICENSE 文件。
 
 #if !defined(_ARRAY_HH)
 #define _ARRAY_HH
@@ -25,22 +23,22 @@ class Vector {
  public:
   Vector();
   Vector(const unsigned int n);
-  Vector(const T& a, const unsigned int n);  // initialize to constant value
-  Vector(const T* a, const unsigned int n);  // Initialize to array
-  Vector(const Vector& rhs);                 // copy constructor
-  ~Vector();                                 // destructor
+  Vector(const T& a, const unsigned int n);  // 初始化为常量值
+  Vector(const T* a, const unsigned int n);  // 由数组初始化
+  Vector(const Vector& rhs);                 // 拷贝构造函数
+  ~Vector();                                 // 析构函数
 
   inline void set(const T* a, const unsigned int n);
   Vector<T> extract(const std::set<unsigned int>& indexes) const;
-  inline T& operator[](const unsigned int& i);  // i-th element
+  inline T& operator[](const unsigned int& i);  // 第 i 个元素
   inline const T& operator[](const unsigned int& i) const;
 
   inline unsigned int size() const;
   inline void resize(const unsigned int n);
   inline void resize(const T& a, const unsigned int n);
 
-  Vector<T>& operator=(const Vector<T>& rhs);  // assignment
-  Vector<T>& operator=(const T& a);            // assign a to every element
+  Vector<T>& operator=(const Vector<T>& rhs);  // 赋值运算
+  Vector<T>& operator=(const T& a);            // 将 a 赋给所有元素
   inline Vector<T>& operator+=(const Vector<T>& rhs);
   inline Vector<T>& operator-=(const Vector<T>& rhs);
   inline Vector<T>& operator*=(const Vector<T>& rhs);
@@ -53,8 +51,8 @@ class Vector {
   inline Vector<T>& operator^=(const T& a);
 
  private:
-  unsigned int n;  // size of array. upper index is n-1
-  T* v;            // storage for data
+  unsigned int n;  // 数组大小，上界为 n-1
+  T* v;            // 数据存储区
 };
 
 template <typename T>
@@ -104,9 +102,8 @@ void Vector<T>::resize(const T& a, const unsigned int n) {
 
 template <typename T>
 inline Vector<T>& Vector<T>::operator=(const Vector<T>& rhs)
-// postcondition: normal assignment via copying has been performed;
-// if vector and rhs were different sizes, vector
-// has been resized to match the size of rhs
+// 后置条件：已通过拷贝执行正常赋值；
+// 若 vector 与 rhs 尺寸不同，则已将 vector 调整为与 rhs 相同的大小
 {
   if (this != &rhs) {
     resize(rhs.n);
@@ -116,21 +113,21 @@ inline Vector<T>& Vector<T>::operator=(const Vector<T>& rhs)
 }
 
 template <typename T>
-inline Vector<T>& Vector<T>::operator=(const T& a)  // assign a to every element
+inline Vector<T>& Vector<T>::operator=(const T& a)  // 将 a 赋给所有元素
 {
   for (unsigned int i = 0; i < n; i++) v[i] = a;
   return *this;
 }
 
 template <typename T>
-inline T& Vector<T>::operator[](const unsigned int& i)  // subscripting
+inline T& Vector<T>::operator[](const unsigned int& i)  // 下标访问
 {
   return v[i];
 }
 
 template <typename T>
 inline const T& Vector<T>::operator[](
-    const unsigned int& i) const  // subscripting
+    const unsigned int& i) const  // 下标访问
 {
   return v[i];
 }
@@ -520,7 +517,7 @@ inline T mean(const Vector<T>& v) {
 template <typename T>
 inline T median(const Vector<T>& v) {
   Vector<T> tmp = sort(v);
-  if (v.size() % 2 == 1)  // it is an odd-sized vector
+  if (v.size() % 2 == 1)  // 奇数长度的向量
     return tmp[v.size() / 2];
   else
     return 0.5 * (tmp[v.size() / 2 - 1] + tmp[v.size() / 2]);
@@ -701,31 +698,31 @@ inline Vector<double> rank(const Vector<T>& v) {
   return tmp_rank;
 }
 
-// enum MType { DIAG };
+// 枚举 MType { DIAG };
 
 template <typename T>
 class Matrix {
  public:
-  Matrix();  // Default constructor
+  Matrix();  // 默认构造函数
   Matrix(const unsigned int n,
-         const unsigned int m);  // Construct a n x m matrix
+         const unsigned int m);  // 构造 n x m 的矩阵
   Matrix(const T& a, const unsigned int n,
-         const unsigned int m);  // Initialize the content to constant a
+         const unsigned int m);  // 将内容初始化为常量 a
   Matrix(MType t, const T& a, const T& o, const unsigned int n,
          const unsigned int m);
   Matrix(MType t, const Vector<T>& v, const T& o, const unsigned int n,
          const unsigned int m);
   Matrix(const T* a, const unsigned int n,
-         const unsigned int m);  // Initialize to array
-  Matrix(const Matrix<T>& rhs);  // Copy constructor
-  ~Matrix();                     // destructor
+         const unsigned int m);  // 由数组初始化
+  Matrix(const Matrix<T>& rhs);  // 拷贝构造函数
+  ~Matrix();                     // 析构函数
 
   inline T* operator[](const unsigned int& i) {
     return v[i];
-  }  // Subscripting: row i
+  }  // 下标访问：第 i 行
   inline const T* operator[](const unsigned int& i) const {
     return v[i];
-  };  // const subsctipting
+  };  // const 下标访问
 
   inline void resize(const unsigned int n, const unsigned int m);
   inline void resize(const T& a, const unsigned int n, const unsigned int m);
@@ -750,11 +747,11 @@ class Matrix {
   inline void setColumns(const std::set<unsigned int>& indexes,
                          const Matrix<T>& m);
 
-  inline unsigned int nrows() const { return n; }  // number of rows
-  inline unsigned int ncols() const { return m; }  // number of columns
+  inline unsigned int nrows() const { return n; }  // 行数
+  inline unsigned int ncols() const { return m; }  // 列数
 
-  inline Matrix<T>& operator=(const Matrix<T>& rhs);  // Assignment operator
-  inline Matrix<T>& operator=(const T& a);  // Assign to every element value a
+  inline Matrix<T>& operator=(const Matrix<T>& rhs);  // 赋值运算符
+  inline Matrix<T>& operator=(const T& a);  // 将每个元素赋值为 a
   inline Matrix<T>& operator+=(const Matrix<T>& rhs);
   inline Matrix<T>& operator-=(const Matrix<T>& rhs);
   inline Matrix<T>& operator*=(const Matrix<T>& rhs);
@@ -768,9 +765,9 @@ class Matrix {
   inline operator Vector<T>();
 
  private:
-  unsigned int n;  // number of rows
-  unsigned int m;  // number of columns
-  T** v;           // storage for data
+  unsigned int n;  // 行数
+  unsigned int m;  // 列数
+  T** v;           // 数据存储区
 };
 
 template <typename T>
@@ -868,9 +865,8 @@ Matrix<T>::~Matrix() {
 
 template <typename T>
 inline Matrix<T>& Matrix<T>::operator=(const Matrix<T>& rhs)
-// postcondition: normal assignment via copying has been performed;
-// if matrix and rhs were different sizes, matrix
-// has been resized to match the size of rhs
+// 后置条件：已通过拷贝执行正常赋值；
+// 若 matrix 与 rhs 尺寸不同，则已将 matrix 调整为与 rhs 相同的大小
 {
   if (this != &rhs) {
     resize(rhs.n, rhs.m);
@@ -881,7 +877,7 @@ inline Matrix<T>& Matrix<T>::operator=(const Matrix<T>& rhs)
 }
 
 template <typename T>
-inline Matrix<T>& Matrix<T>::operator=(const T& a)  // assign a to every element
+inline Matrix<T>& Matrix<T>::operator=(const T& a)  // 将每个元素赋值为 a
 {
   for (unsigned int i = 0; i < n; i++)
     for (unsigned int j = 0; j < m; j++) v[i][j] = a;
@@ -1455,7 +1451,7 @@ void svd(const Matrix<T>& A, Matrix<T>& U, Vector<T>& W, Matrix<T>& V) {
   T anorm, c, f, g, h, s, scale, x, y, z;
   g = scale = anorm = (T)0.0;
 
-  // Householder reduction to bidiagonal form
+  // Householder 变换，降为双对角形式
   for (i = 0; i < n; i++) {
     l = i + 1;
     rv1[i] = scale * g;
@@ -1504,7 +1500,7 @@ void svd(const Matrix<T>& A, Matrix<T>& U, Vector<T>& W, Matrix<T>& V) {
     }
     anorm = std::max(anorm, fabs(W[i]) + fabs(rv1[i]));
   }
-  // Accumulation of right-hand transformations
+  // 累积右侧变换
   for (i = n - 1; i >= 0; i--) {
     if (i < n - 1) {
       if (g != (T)0.0) {
@@ -1521,7 +1517,7 @@ void svd(const Matrix<T>& A, Matrix<T>& U, Vector<T>& W, Matrix<T>& V) {
     g = rv1[i];
     l = i;
   }
-  // Accumulation of left-hand transformations
+  // 累积左侧变换
   for (i = std::min(m, n) - 1; i >= 0; i--) {
     l = i + 1;
     g = W[i];
@@ -1539,15 +1535,13 @@ void svd(const Matrix<T>& A, Matrix<T>& U, Vector<T>& W, Matrix<T>& V) {
       for (j = i; j < m; j++) U[j][i] = (T)0.0;
     U[i][i]++;
   }
-  // Diagonalization of the bidiagonal form: loop over singular values, and over
-  // allowed iterations.
+  // 对双对角形式进行对角化：遍历奇异值及允许的迭代次数。
   for (k = n - 1; k >= 0; k--) {
     for (unsigned int its = 0; its < max_its; its++) {
       flag = true;
-      for (l = k; l >= 0; l--)  // FIXME: in NR it was l >= 1 but there
-                                // subscripts start from one
-      {                         // Test for splitting
-        nm = l - 1;             // Note that rV[0] is always zero
+      for (l = k; l >= 0; l--)  // FIXME：在 NR 中为 l >= 1，因为下标从 1 开始
+      {                         // 检测是否需要分裂
+        nm = l - 1;             // 注意 rV[0] 始终为零
         if ((T)(fabs(rv1[l]) + anorm) == anorm) {
           flag = false;
           break;
@@ -1555,7 +1549,7 @@ void svd(const Matrix<T>& A, Matrix<T>& U, Vector<T>& W, Matrix<T>& V) {
         if ((T)(fabs(W[nm]) + anorm) == anorm) break;
       }
       if (flag) {
-        // Cancellation of rv1[l], if l > 0 FIXME: it was l > 1 in NR
+        // 若 l > 0，则消除 rv1[l]（FIXME：NR 中条件为 l > 1）
         c = (T)0.0;
         s = (T)1.0;
         for (i = l; i <= k; i++) {
@@ -1577,8 +1571,8 @@ void svd(const Matrix<T>& A, Matrix<T>& U, Vector<T>& W, Matrix<T>& V) {
         }
       }
       z = W[k];
-      if (l == k) {        // Convergence
-        if (z < (T)0.0) {  // Singular value is made nonnegative
+      if (l == k) {        // 收敛
+        if (z < (T)0.0) {  // 将奇异值调整为非负
           W[k] = -z;
           for (j = 0; j < n; j++) V[j][k] = -V[j][k];
         }
@@ -1595,7 +1589,7 @@ void svd(const Matrix<T>& A, Matrix<T>& U, Vector<T>& W, Matrix<T>& V) {
       f = ((y - z) * (y + z) + (g - h) * (g + h)) / (2.0 * h * y);
       g = dist(f, (T)1.0);
       f = ((x - z) * (x + z) + h * ((y / (f + sign(f) * fabs(g))) - h)) / x;
-      c = s = (T)1.0;  // Next QR transformation
+      c = s = (T)1.0;  // 下一次 QR 变换
       for (j = l; j <= nm; j++) {
         i = j + 1;
         g = rv1[i];
@@ -1618,7 +1612,7 @@ void svd(const Matrix<T>& A, Matrix<T>& U, Vector<T>& W, Matrix<T>& V) {
         }
         z = dist(f, h);
         W[j] = z;
-        if (z != 0)  // Rotation can be arbitrary if z = 0
+        if (z != 0)  // 若 z = 0，则旋转角度可随意
         {
           z = (T)1.0 / z;
           c = f * z;
@@ -2210,6 +2204,6 @@ inline Matrix<double> r_rank(const Matrix<T> m) {
   return tmp;
 }
 
-}  // namespace quadprogpp
+}  // 命名空间 quadprogpp
 
 #endif  // define _ARRAY_HH_

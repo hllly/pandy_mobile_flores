@@ -1,5 +1,5 @@
 //
-// Created by tlab-uav on 24-9-6.
+// 由 pj 于 24-9-6 创建。
 //
 
 #include "unitree_guide_controller/UnitreeGuideController.h"
@@ -44,15 +44,7 @@ namespace unitree_guide_controller {
     }
 
     controller_interface::return_type UnitreeGuideController::
-    update(const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/) {
-        // auto now = std::chrono::steady_clock::now();
-        // std::chrono::duration<double> time_diff = now - last_update_time_;
-        // last_update_time_ = now;
-        //
-        // // Calculate the frequency
-        // update_frequency_ = 1.0 / time_diff.count();
-        // RCLCPP_INFO(get_node()->get_logger(), "Update frequency: %f Hz", update_frequency_);
-
+    update(const rclcpp::Time & /*时间*/, const rclcpp::Duration & /*周期*/) {
         if (ctrl_comp_.robot_model_ == nullptr) {
             return controller_interface::return_type::OK;
         }
@@ -89,7 +81,7 @@ namespace unitree_guide_controller {
             state_interface_types_ =
                     auto_declare<std::vector<std::string> >("state_interfaces", state_interface_types_);
 
-            // imu sensor
+            // IMU 传感器
             imu_name_ = auto_declare<std::string>("imu_name", imu_name_);
             base_name_ = auto_declare<std::string>("base_name", base_name_);
             imu_interface_types_ = auto_declare<std::vector<std::string> >("imu_interfaces", state_interface_types_);
@@ -97,7 +89,7 @@ namespace unitree_guide_controller {
             feet_names_ =
                     auto_declare<std::vector<std::string> >("feet_names", feet_names_);
 
-            // pose parameters
+            // 姿态参数
             down_pos_ = auto_declare<std::vector<double> >("down_pos", down_pos_);
             stand_pos_ = auto_declare<std::vector<double> >("stand_pos", stand_pos_);
             stand_kp_ = auto_declare<double>("stand_kp", stand_kp_);
@@ -116,10 +108,10 @@ namespace unitree_guide_controller {
     }
 
     controller_interface::CallbackReturn UnitreeGuideController::on_configure(
-        const rclcpp_lifecycle::State & /*previous_state*/) {
+        const rclcpp_lifecycle::State & /*上一个状态*/) {
         control_input_subscription_ = get_node()->create_subscription<control_input_msgs::msg::Inputs>(
             "/control_input", 10, [this](const control_input_msgs::msg::Inputs::SharedPtr msg) {
-                // Handle message
+                // 处理消息
                 ctrl_comp_.control_inputs_.command = msg->command;
                 ctrl_comp_.control_inputs_.lx = msg->lx;
                 ctrl_comp_.control_inputs_.ly = msg->ly;
@@ -141,11 +133,11 @@ namespace unitree_guide_controller {
     }
 
     controller_interface::CallbackReturn
-    UnitreeGuideController::on_activate(const rclcpp_lifecycle::State & /*previous_state*/) {
-        // clear out vectors in case of restart
+UnitreeGuideController::on_activate(const rclcpp_lifecycle::State & /*上一个状态*/) {
+        // 防止重启后残留数据，先清空缓存向量
         ctrl_comp_.clear();
 
-        // assign command interfaces
+        // 分配控制指令接口
         for (auto &interface: command_interfaces_) {
             std::string interface_name = interface.get_interface_name();
             if (const size_t pos = interface_name.find('/'); pos != std::string::npos) {
@@ -155,7 +147,7 @@ namespace unitree_guide_controller {
             }
         }
 
-        // assign state interfaces
+        // 分配状态接口
         for (auto &interface: state_interfaces_) {
             if (interface.get_prefix_name() == imu_name_) {
                 ctrl_comp_.imu_state_interface_.emplace_back(interface);
@@ -164,7 +156,7 @@ namespace unitree_guide_controller {
             }
         }
 
-        // Create FSM List
+        // 创建有限状态机状态列表
         state_list_.passive = std::make_shared<StatePassive>(ctrl_comp_);
         state_list_.fixedDown = std::make_shared<StateFixedDown>(ctrl_comp_, down_pos_, stand_kp_, stand_kd_);
         state_list_.fixedStand = std::make_shared<StateFixedStand>(ctrl_comp_, stand_pos_, stand_kp_, stand_kd_);
@@ -173,7 +165,7 @@ namespace unitree_guide_controller {
         state_list_.balanceTest = std::make_shared<StateBalanceTest>(ctrl_comp_);
         state_list_.trotting = std::make_shared<StateTrotting>(ctrl_comp_);
 
-        // Initialize FSM
+        // 初始化有限状态机
         current_state_ = state_list_.passive;
         current_state_->enter();
         next_state_ = current_state_;
@@ -184,23 +176,23 @@ namespace unitree_guide_controller {
     }
 
     controller_interface::CallbackReturn UnitreeGuideController::on_deactivate(
-        const rclcpp_lifecycle::State & /*previous_state*/) {
+        const rclcpp_lifecycle::State & /*上一个状态*/) {
         release_interfaces();
         return CallbackReturn::SUCCESS;
     }
 
     controller_interface::CallbackReturn
-    UnitreeGuideController::on_cleanup(const rclcpp_lifecycle::State & /*previous_state*/) {
+UnitreeGuideController::on_cleanup(const rclcpp_lifecycle::State & /*上一个状态*/) {
         return CallbackReturn::SUCCESS;
     }
 
     controller_interface::CallbackReturn
-    UnitreeGuideController::on_error(const rclcpp_lifecycle::State & /*previous_state*/) {
+UnitreeGuideController::on_error(const rclcpp_lifecycle::State & /*上一个状态*/) {
         return CallbackReturn::SUCCESS;
     }
 
     controller_interface::CallbackReturn
-    UnitreeGuideController::on_shutdown(const rclcpp_lifecycle::State & /*previous_state*/) {
+UnitreeGuideController::on_shutdown(const rclcpp_lifecycle::State & /*上一个状态*/) {
         return CallbackReturn::SUCCESS;
     }
 

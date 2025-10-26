@@ -1,16 +1,14 @@
-// Copyright (c) 2022, Stogl Robotics Consulting UG (haftungsbeschränkt) (template)
+// 版权所有 (c) 2022，Stogl Robotics Consulting UG (haftungsbeschränkt)（模板）
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// 根据 Apache License 2.0 版（下称“许可证”）授权；
+// 未遵循许可证条款前不得使用本文件。
+// 可在以下地址获取许可证副本：
 //
 //     http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// 除非适用法律要求或书面同意，否则依据许可证分发的软件
+// 均以“按原样”方式提供，不附带任何明示或暗示的担保或条件。
+// 更多权限与限制条款请参阅许可证文本。
 
 #ifndef MDOG_HARDWARE_INTERFACE__MDOG_HARDWARE_INTERFACE_HPP_
 #define MDOG_HARDWARE_INTERFACE__MDOG_HARDWARE_INTERFACE_HPP_
@@ -123,7 +121,7 @@ private:
   void low_state_callback(const pd_interfaces::msg::LowState::SharedPtr msg);
 };
 
-}  // namespace mdog_hardware_interface
+}  // 命名空间 mdog_hardware_interface
 
 namespace hardware_interface{
   constexpr char HW_IF_KP[] = "kp";
@@ -131,4 +129,3 @@ namespace hardware_interface{
 }
 
 #endif  // MDOG_HARDWARE_INTERFACE__MDOG_HARDWARE_INTERFACE_HPP_
-

@@ -1,5 +1,5 @@
 //
-// Created by tlab-uav on 24-9-18.
+// 由 pj 于 24-9-18 创建。
 //
 
 #ifndef STATETROTTING_H
@@ -27,23 +27,22 @@ private:
     void calcCmd();
 
     /**
-    * Calculate the torque command
+    * 计算输出的力矩指令。
     */
     void calcTau();
 
     /**
-    * Calculate the joint space velocity and acceleration
+    * 计算关节空间的速度与加速度。
     */
     void calcQQd();
 
     /**
-    * Calculate the PD gain for the joints
+    * 计算各关节的 PD 增益。
     */
     void calcGain() const;
 
     /**
-     * Check whether the robot should take a step or not
-     * @return
+     * 判断当前是否需要迈步。
      */
     bool checkStepOrNot();
 
@@ -54,11 +53,11 @@ private:
 
     GaitGenerator gait_generator_;
 
-    // Robot State
+    // 机器人状态量
     Vec3 pos_body_, vel_body_;
     RotMat B2G_RotMat, G2B_RotMat;
 
-    // Robot command
+    // 机器人控制指令
     Vec3 pcd_;
     Vec3 vel_target_, v_cmd_body_;
     double dt_;
@@ -67,7 +66,7 @@ private:
     Vec34 pos_feet_global_goal_, vel_feet_global_goal_;
     RotMat Rd;
 
-    // Control Parameters
+    // 控制参数
     double gait_height_;
     Vec3 pos_error_, vel_error_;
     Mat3 Kpp, Kdp, Kd_w_;

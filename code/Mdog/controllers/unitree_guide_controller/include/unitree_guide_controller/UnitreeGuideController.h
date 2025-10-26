@@ -1,5 +1,5 @@
 //
-// Created by tlab-uav on 24-9-6.
+// 由 pj 于 24-9-6 创建。
 //
 
 #ifndef QUADRUPEDCONTROLLER_H
@@ -86,15 +86,14 @@ namespace unitree_guide_controller {
         std::vector<std::string> imu_interface_types_;
         std::vector<std::string> feet_names_;
 
-        // FR FL RR RL
-        // std::vector<double> stand_pos_ = {
-        //     0.0, 0.67, -1.3,
-        //     0.0, 0.67, -1.3,
-        //     0.0, 0.67, -1.3,
-        //     0.0, 0.67, -1.3
-        // };
+        // 顺序：FR FL RR RL
+        // 备选站立姿态（原始 Unitree 配置）：
+        // 0.0, 0.67, -1.3,
+        // 0.0, 0.67, -1.3,
+        // 0.0, 0.67, -1.3,
+        // 0.0, 0.67, -1.3
 
-        //FR FL RR RL
+        // 顺序：FR FL RR RL
         std::vector<double> stand_pos_ = {
             0.0, -0.7, 0.5, 0.0,
             0.0, 0.7, -0.5, 0.0,
@@ -102,12 +101,11 @@ namespace unitree_guide_controller {
             0.0, 0.7, -0.5, 0.0
         };
 
-        // std::vector<double> down_pos_ = {
-        //     0.0, 1.3, -2.4,
-        //     0.0, 1.3, -2.4,
-        //     0.0, 1.3, -2.4,
-        //     0.0, 1.3, -2.4
-        // };
+        // 备选下蹲姿态（原始 Unitree 配置）：
+        // 0.0, 1.3, -2.4,
+        // 0.0, 1.3, -2.4,
+        // 0.0, 1.3, -2.4,
+        // 0.0, 1.3, -2.4
 
         std::vector<double> down_pos_ = {
             0.0, -0.9, 1.6, 0.0,
@@ -118,8 +116,8 @@ namespace unitree_guide_controller {
 
         double stand_kp_ = 590.0;
         double stand_kd_ = 20.0;
-        // double stand_kp_ = 500.0;
-        // double stand_kd_ = 5.0;
+        // 备选增益：stand_kp_ = 500.0;
+        // 备选阻尼：stand_kd_ = 5.0;
 
         rclcpp::Subscription<control_input_msgs::msg::Inputs>::SharedPtr control_input_subscription_;
         rclcpp::Subscription<std_msgs::msg::String>::SharedPtr robot_description_subscription_;

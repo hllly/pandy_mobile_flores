@@ -1,5 +1,5 @@
 //
-// Created by tlab-uav on 24-9-19.
+// 由 pj 于 24-9-19 创建。
 //
 
 #include "leg_pd_controller/LegPdController.h"
@@ -52,23 +52,23 @@ namespace leg_pd_controller {
     }
 
     controller_interface::CallbackReturn LegPdController::on_configure(
-        const rclcpp_lifecycle::State & /*previous_state*/) {
+        const rclcpp_lifecycle::State & /*上一个状态*/) {
         reference_interfaces_.resize(joint_names_.size() * 5, std::numeric_limits<double>::quiet_NaN());
         return CallbackReturn::SUCCESS;
     }
 
     controller_interface::CallbackReturn LegPdController::on_activate(
-        const rclcpp_lifecycle::State & /*previous_state*/) {
+        const rclcpp_lifecycle::State & /*上一个状态*/) {
         joint_effort_command_interface_.clear();
         joint_position_state_interface_.clear();
         joint_velocity_state_interface_.clear();
 
-        // assign effort command interface
+        // 分配力矩指令接口
         for (auto &interface: command_interfaces_) {
             joint_effort_command_interface_.emplace_back(interface);
         }
 
-        // assign state interfaces
+        // 分配状态接口
         for (auto &interface: state_interfaces_) {
             state_interface_map_[interface.get_interface_name()]->push_back(interface);
         }
@@ -77,17 +77,17 @@ namespace leg_pd_controller {
     }
 
     controller_interface::CallbackReturn LegPdController::on_deactivate(
-        const rclcpp_lifecycle::State & /*previous_state*/) {
+        const rclcpp_lifecycle::State & /*上一个状态*/) {
         release_interfaces();
         return CallbackReturn::SUCCESS;
     }
 
-    bool LegPdController::on_set_chained_mode(bool /*chained_mode*/) {
+    bool LegPdController::on_set_chained_mode(bool /*串联模式*/) {
         return true;
     }
 
     controller_interface::return_type LegPdController::update_and_write_commands(
-        const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/) {
+        const rclcpp::Time & /*时间*/, const rclcpp::Duration & /*周期*/) {
         if (joint_names_.size() != joint_effort_command_.size() ||
             joint_names_.size() != joint_kp_command_.size() ||
             joint_names_.size() != joint_position_command_.size() ||
@@ -109,7 +109,7 @@ namespace leg_pd_controller {
         }
 
         for (size_t i = 0; i < joint_names_.size(); ++i) {
-            // PD Controller
+            // PD 控制器
             const double torque = joint_effort_command_[i] + joint_kp_command_[i] * (
                                       joint_position_command_[i] - joint_position_state_interface_[i].get().get_value())
                                   +
@@ -147,7 +147,7 @@ namespace leg_pd_controller {
     }
 #else
     controller_interface::return_type LegPdController::update_reference_from_subscribers(
-        const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/) {
+        const rclcpp::Time & /*时间*/, const rclcpp::Duration & /*周期*/) {
         return controller_interface::return_type::OK;
     }
 #endif

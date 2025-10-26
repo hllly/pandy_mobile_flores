@@ -1,5 +1,5 @@
 //
-// Created by tlab-uav on 24-9-11.
+// 由 pj 于 24-9-11 创建。
 //
 
 #ifndef STATEFIXEDDOWN_H
@@ -29,8 +29,8 @@ private:
 
     double kp_, kd_;
 
-    double duration_ = 600; // steps
-    double percent_ = 0; //%
+    double duration_ = 600; // 步数
+    double percent_ = 0; // 百分比
     double phase = 0.0;
 };
 

@@ -1,5 +1,5 @@
 //
-// Created by biao on 24-9-10.
+// 由 pj 于 24-9-10 创建。
 //
 
 #ifndef STATEFIXEDSTAND_H
@@ -29,8 +29,8 @@ private:
 
     double kp_, kd_;
 
-    double duration_ = 600; // steps
-    double percent_ = 0; //%
+    double duration_ = 600; // 步数
+    double percent_ = 0; // 百分比
     double phase = 0.0;
     std::vector<double> down_pos;
 };

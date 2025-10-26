@@ -1,5 +1,5 @@
 //
-// Created by biao on 24-9-18.
+// 由 pj 于 24-9-18 创建。
 //
 
 
@@ -33,20 +33,20 @@ public:
 
 private:
     /**
-     * Update phase, contact and status based on current time.
-     * @param phase foot phase
-     * @param contact foot contact
-     * @param status Wave Status
+     * 根据当前时间更新步态相位、接触状态与有限状态机状态。
+     * @param phase 足端相位
+     * @param contact 足端接触标识
+     * @param status 波形状态枚举
      */
     void calcWave(Vec4 &phase, VecInt4 &contact, WaveStatus status);
 
     double period_{};
-    double st_ratio_{}; // stance phase ratio
+    double st_ratio_{}; // 支撑相所占比例
     Vec4 bias_;
 
-    Vec4 normal_t_; // normalize time [0,1)
-    Vec4 phase_past_; // foot phase
-    VecInt4 contact_past_; // foot contact
+    Vec4 normal_t_; // 归一化时间区间 [0,1)
+    Vec4 phase_past_; // 历史足端相位
+    VecInt4 contact_past_; // 历史足端接触状态
     VecInt4 switch_status_;
     WaveStatus status_past_;
 

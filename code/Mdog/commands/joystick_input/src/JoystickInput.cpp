@@ -1,5 +1,5 @@
 //
-// Created by tlab-uav on 24-9-13.
+// 由 pj 于 24-9-13 创建。
 //
 
 #include "joystick_input/JoystickInput.h"
@@ -14,23 +14,23 @@ JoystickInput::JoystickInput() : Node("joysick_input_node") {
 
 void JoystickInput::joy_callback(sensor_msgs::msg::Joy::SharedPtr msg) {
     if (msg->buttons[1] && msg->buttons[4]) {
-        inputs_.command = 1; // LB + B
+        inputs_.command = 1; // LB + B 组合键
     } else if (msg->buttons[0] && msg->buttons[4]) {
-        inputs_.command = 2; // LB + A
+        inputs_.command = 2; // LB + A 组合键
     } else if (msg->buttons[2] && msg->buttons[4]) {
-        inputs_.command = 3; // LB + X
+        inputs_.command = 3; // LB + X 组合键
     } else if (msg->buttons[3] && msg->buttons[4]) {
-        inputs_.command = 4; // LB + Y
+        inputs_.command = 4; // LB + Y 组合键
     } else if (msg->axes[2] != 1 && msg->buttons[1]) {
-        inputs_.command = 5; // LT + B
+        inputs_.command = 5; // LT + B 组合键
     } else if (msg->axes[2] != 1 && msg->buttons[0]) {
-        inputs_.command = 6; // LT + A
+        inputs_.command = 6; // LT + A 组合键
     } else if (msg->axes[2] != 1 && msg->buttons[2]) {
-        inputs_.command = 7; // LT + X
+        inputs_.command = 7; // LT + X 组合键
     } else if (msg->axes[2] != 1 && msg->buttons[3]) {
-        inputs_.command = 8; // LT + Y
+        inputs_.command = 8; // LT + Y 组合键
     } else if (msg->buttons[7]) {
-        inputs_.command = 9; // START
+        inputs_.command = 9; // START 键
     } else {
         inputs_.command = 0;
         inputs_.lx = -msg->axes[0];

@@ -1,5 +1,5 @@
 //
-// Created by biao on 24-9-11.
+// 由 pj 于 24-9-11 创建。
 //
 
 #include <keyboard_input/KeyboardInput.h>
@@ -47,28 +47,28 @@ void KeyboardInput::timer_callback() {
 void KeyboardInput::check_command(const char key) {
     switch (key) {
         case '1':
-            inputs_.command = 1; // L2_B
+            inputs_.command = 1; // L2_B 指令
             break;
         case '2':
-            inputs_.command = 2; // L2_A
+            inputs_.command = 2; // L2_A 指令
             break;
         case '3':
-            inputs_.command = 3; // L2_X
+            inputs_.command = 3; // L2_X 指令
             break;
         case '4':
-            inputs_.command = 4; // L2_Y
+            inputs_.command = 4; // L2_Y 指令
             break;
         case '5':
-            inputs_.command = 5; // L1_A
+            inputs_.command = 5; // L1_A 指令
             break;
         case '6':
-            inputs_.command = 6; // L1_B
+            inputs_.command = 6; // L1_B 指令
             break;
         case '7':
-            inputs_.command = 7; // L1_X
+            inputs_.command = 7; // L1_X 指令
             break;
         case '8':
-            inputs_.command = 8; // L1_Y
+            inputs_.command = 8; // L1_Y 指令
             break;
         case '9':
             inputs_.command = 9;

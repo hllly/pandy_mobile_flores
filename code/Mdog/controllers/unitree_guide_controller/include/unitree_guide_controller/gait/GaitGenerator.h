@@ -1,5 +1,5 @@
 //
-// Created by biao on 24-9-18.
+// 由 pj 于 24-9-18 创建。
 //
 
 
@@ -33,37 +33,33 @@ private:
     Vec3 getFootVel(int i);
 
     /**
-     * Calculate the position of the foot in the XY plane
-     * @param startXY
-     * @param endXY
-     * @param phase
-     * @return
+     * 计算足端在 XY 平面上的位置。
+     * @param startXY 起始坐标
+     * @param endXY 目标坐标
+     * @param phase 相位
      */
     static double cycloidXYPosition(double startXY, double endXY, double phase);
 
     /**
-     * Calculate the position of the foot in the Z direction
-     * @param startZ
-     * @param height
-     * @param phase
-     * @return
+     * 计算足端在 Z 方向上的高度。
+     * @param startZ 初始高度
+     * @param height 抬腿高度
+     * @param phase 相位
      */
     static double cycloidZPosition(double startZ, double height, double phase);
 
     /**
-     * Calculate the velocity of the foot in the XY plane
-     * @param startXY
-     * @param endXY
-     * @param phase
-     * @return
+     * 计算足端在 XY 平面上的速度。
+     * @param startXY 起始坐标
+     * @param endXY 目标坐标
+     * @param phase 相位
      */
     [[nodiscard]] double cycloidXYVelocity(double startXY, double endXY, double phase) const;
 
     /**
-     * Calculate the velocity of the foot in the Z direction
-     * @param height
-     * @param phase
-     * @return
+     * 计算足端在 Z 方向上的速度。
+     * @param height 抬腿高度
+     * @param phase 相位
      */
     [[nodiscard]] double cycloidZVelocity(double height, double phase) const;
 

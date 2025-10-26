@@ -1,5 +1,5 @@
 //
-// Created by biao on 24-9-12.
+// 由 pj 于 24-9-12 创建。
 //
 
 #include <iostream>
@@ -29,7 +29,7 @@ QuadrupedRobot::QuadrupedRobot(CtrlComponent &ctrl_component, const std::string 
 
     std::cout << "robot_legs_.size(): " << robot_legs_.size() << std::endl;
 
-    // calculate total mass from urdf
+    // 根据 URDF 统计整机质量
     mass_ = 0;
     for (const auto &[fst, snd]: robot_tree.getSegments()) {
         mass_ += snd.segment.getInertia().getMass();

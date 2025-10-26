@@ -1,16 +1,14 @@
-// Copyright (c) 2022, Stogl Robotics Consulting UG (haftungsbeschränkt) (template)
+// 版权所有 (c) 2022，Stogl Robotics Consulting UG (haftungsbeschränkt)（模板）
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// 根据 Apache License 2.0 版（下称“许可证”）授权；
+// 未遵循许可证条款前不得使用本文件。
+// 可在以下地址获取许可证副本：
 //
 //     http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// 除非适用法律要求或书面同意，否则依据许可证分发的软件
+// 均以“按原样”方式提供，不附带任何明示或暗示的担保或条件。
+// 更多权限与限制条款请参阅许可证文本。
 
 #include <limits>
 #include <vector>
@@ -33,7 +31,7 @@ hardware_interface::CallbackReturn MdogHardwareInterface::on_init(
 
   logger_ = std::make_shared<rclcpp::Logger>(rclcpp::get_logger(
   "controller_manager.resource_manager.hardware_component.system.MdogHardwareInterface"));
-  // TODO(anyone): read parameters and initialize the hardware
+  // TODO(任意贡献者)：读取参数并初始化硬件
   // hw_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   // hw_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   joint_torque_command_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
@@ -70,9 +68,9 @@ hardware_interface::CallbackReturn MdogHardwareInterface::on_init(
 }
 
 hardware_interface::CallbackReturn MdogHardwareInterface::on_configure(
-  const rclcpp_lifecycle::State & /*previous_state*/)
+  const rclcpp_lifecycle::State & /*上一个状态*/)
 {
-  // TODO(anyone): prepare the robot to be ready for read calls and write calls of some interfaces
+  // TODO(任意贡献者)：准备机器人，使部分接口能够执行读写
   joints_states.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
 
   this->node_ =  std::make_shared<rclcpp::Node>("hardware_node");
@@ -114,13 +112,13 @@ std::vector<hardware_interface::StateInterface> MdogHardwareInterface::export_st
         state_interfaces.emplace_back(joint_name, "error", &joint_error_[ind++]);
     }
 
-    // export imu sensor state interface
+    // 导出 IMU 传感器状态接口
     for (uint i = 0; i < info_.sensors[0].state_interfaces.size(); i++) {
         state_interfaces.emplace_back(
             info_.sensors[0].name, info_.sensors[0].state_interfaces[i].name, &imu_states_[i]);
     }
 
-    // // export foot force sensor state interface
+    // // 导出足端力传感器状态接口
     // for (uint i = 0; i < info_.sensors[1].state_interfaces.size(); i++) {
     //     state_interfaces.emplace_back(
     //         info_.sensors[1].name, info_.sensors[1].state_interfaces[i].name, &foot_force_[i]);
@@ -155,9 +153,9 @@ std::vector<hardware_interface::CommandInterface> MdogHardwareInterface::export_
 }
 
 hardware_interface::CallbackReturn MdogHardwareInterface::on_activate(
-  const rclcpp_lifecycle::State & /*previous_state*/)
+  const rclcpp_lifecycle::State & /*上一个状态*/)
 {
-  // TODO(anyone): prepare the robot to receive commands
+  // TODO(任意贡献者)：让机器人准备好接收指令
   // RCLCPP_INFO(rclcpp::get_logger("MdogHardwareInterface"), "Hardware interface activated successfully.");
   // joint_position_command_ = joint_position_;
   // joint_velocities_command_ = joint_velocities_;
@@ -175,17 +173,17 @@ hardware_interface::CallbackReturn MdogHardwareInterface::on_activate(
 }
 
 hardware_interface::CallbackReturn MdogHardwareInterface::on_deactivate(
-  const rclcpp_lifecycle::State & /*previous_state*/)
+  const rclcpp_lifecycle::State & /*上一个状态*/)
 {
-  // TODO(anyone): prepare the robot to stop receiving commands
+  // TODO(任意贡献者)：让机器人停止接收指令
 
   return CallbackReturn::SUCCESS;
 }
 
 hardware_interface::return_type MdogHardwareInterface::read(
-  const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
+  const rclcpp::Time & /*时间*/, const rclcpp::Duration & /*周期*/)
 {
-  // TODO(anyone): read robot states
+  // TODO(任意贡献者)：读取机器人状态
   // RCLCPP_INFO(rclcpp::get_logger("MdogHardwareInterface"), "--------------------------------------------------");
     // for (int i=0; i<16; i++){
       // joint_position_[i] = joint_position_[i] - joint_offset[i];
@@ -197,7 +195,7 @@ hardware_interface::return_type MdogHardwareInterface::read(
     // RCLCPP_INFO(rclcpp::get_logger("MdogHardwareInterface"), "joint_position_[4]: %f", joint_position_temp_[4]);
     // RCLCPP_INFO(rclcpp::get_logger("MdogHardwareInterface"), "joint_position_[14]: %f", joint_position_temp_[14]);
 
-    //FL
+    // 左前（FL）
     int j = 0;
     for (int i=0; i<4; i++){
       joint_position_[j] = joint_position_temp_[i];
@@ -208,7 +206,7 @@ hardware_interface::return_type MdogHardwareInterface::read(
     }
     joint_position_[3] = (joint_position_temp_[3]-wheel_init_pos_[0]);
 
-    //FR
+    // 右前（FR）
     j = 4;
     for (int i=8; i<12; i++){
       joint_position_[j] = joint_position_temp_[i];
@@ -219,7 +217,7 @@ hardware_interface::return_type MdogHardwareInterface::read(
     }
     joint_position_[7] = (joint_position_temp_[11]-wheel_init_pos_[1]);
 
-    //RL
+    // 左后（RL）
     j = 8;
     for (int i=12; i<16; i++){
       joint_position_[j] = joint_position_temp_[i];
@@ -230,7 +228,7 @@ hardware_interface::return_type MdogHardwareInterface::read(
     }
     joint_position_[11] = (joint_position_temp_[15]-wheel_init_pos_[2]);
 
-    //RR
+    // 右后（RR）
     j = 12;
     for (int i=4; i<8; i++){
       joint_position_[j] = joint_position_temp_[i];
@@ -241,20 +239,20 @@ hardware_interface::return_type MdogHardwareInterface::read(
     }
     joint_position_[15] = (joint_position_temp_[7]-wheel_init_pos_[3]);
 
-    std::array<double,16> direction = { 1.0, 1.0, 1.0, 1.0,  //FL
-                                        1.0, 1.0, 1.0,-1.0,  //FR
-                                        1.0, 1.0, 1.0, 1.0,  //RL
-                                        1.0, 1.0, 1.0,-1.0}; //RR
+    std::array<double,16> direction = { 1.0, 1.0, 1.0, 1.0,  // 左前（FL）
+                                        1.0, 1.0, 1.0,-1.0,  // 右前（FR）
+                                        1.0, 1.0, 1.0, 1.0,  // 左后（RL）
+                                        1.0, 1.0, 1.0,-1.0}; // 右后（RR）
 
-    std::array<double,16> init_offset = { 3.861508,3.218195,0.872212,0.00,    //FL 
-                                          1.366537,0.924127,2.849465,0.00,    //FR
-                                          2.975827,6.062500,0.729456,0.00,    //RL
-                                          1.336193,4.610954,3.986959,0.00,};  //RR
+    std::array<double,16> init_offset = { 3.861508,3.218195,0.872212,0.00,    // 左前（FL） 
+                                          1.366537,0.924127,2.849465,0.00,    // 右前（FR）
+                                          2.975827,6.062500,0.729456,0.00,    // 左后（RL）
+                                          1.336193,4.610954,3.986959,0.00,};  // 右后（RR）
 
-    std::array<double,16> torque_const = {0.11577,0.11577,0.11577,0.1162,     //FL 
-                                          0.11577,0.11577,0.11577,0.1162,     //FR
-                                          0.11577,0.11577,0.11577,0.1162,     //RL
-                                          0.11577,0.11577,0.11577,0.1162, };  //RR
+    std::array<double,16> torque_const = {0.11577,0.11577,0.11577,0.1162,     // 左前（FL） 
+                                          0.11577,0.11577,0.11577,0.1162,     // 右前（FR）
+                                          0.11577,0.11577,0.11577,0.1162,     // 左后（RL）
+                                          0.11577,0.11577,0.11577,0.1162, };  // 右后（RR）
     for (int i=0; i<16; i++){
       joint_position_[i] = (joint_position_[i] - init_offset[i])*0.1;
       joint_velocities_[i] *= 0.1;
@@ -267,10 +265,10 @@ hardware_interface::return_type MdogHardwareInterface::read(
       joint_effort_[i] *= direction[i];
     }
 
-    std::array<double,16> joint_offset = {0.0,0.580027778,-1.64361556,0.0,//FL
-                                          0.0,-0.580027778,1.64361556,0.0,//FR
-                                          0.0,0.580027778,-1.64361556,0.0,//RL
-                                          0.0,-0.580027778,1.64361556,0.0,//RR
+    std::array<double,16> joint_offset = {0.0,0.580027778,-1.64361556,0.0,// 左前（FL）
+                                          0.0,-0.580027778,1.64361556,0.0,// 右前（FR）
+                                          0.0,0.580027778,-1.64361556,0.0,// 左后（RL）
+                                          0.0,-0.580027778,1.64361556,0.0,// 右后（RR）
                                           };
 
 
@@ -278,7 +276,7 @@ hardware_interface::return_type MdogHardwareInterface::read(
       joint_position_[i] = (joint_position_[i] + joint_offset[i]);
     }
 
-    // print all joint position
+    // 打印所有关节位置
     // for (int i = 0; i < 16; ++i){
     //   RCLCPP_INFO(rclcpp::get_logger("MdogHardwareInterface"), "joint_position_[%d]: %f", i, joint_position_[i]);
     // }
@@ -287,7 +285,7 @@ hardware_interface::return_type MdogHardwareInterface::read(
     // RCLCPP_INFO(rclcpp::get_logger("MdogHardwareInterface"), "joint_position_[%d]: %f", 10, joint_position_[10]);
     // RCLCPP_INFO(rclcpp::get_logger("MdogHardwareInterface"), "joint_position_[%d]: %f", 14, joint_position_[14]);
 
-    // print all joiny effort
+    // 打印所有关节力矩
     // for (int i = 0; i < 16; ++i){
     //   RCLCPP_INFO(rclcpp::get_logger("MdogHardwareInterface"), "joint_effort_[%d]: %f", i, joint_effort_[i]);
     // }
@@ -304,27 +302,27 @@ hardware_interface::return_type MdogHardwareInterface::read(
 }
 
 hardware_interface::return_type MdogHardwareInterface::write(
-  const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/)
+  const rclcpp::Time & /*时间*/, const rclcpp::Duration & /*周期*/)
 {
-  // TODO(anyone): write robot's commands'
+  // TODO(任意贡献者)：下发机器人的控制指令
 
 
-  // FR hip-thigh-knee-wheel -> FL -> RR -> RL
-  std::array<double,16> init_offset = { 3.861508,3.218195,0.872212,0.00,    //FL 
-                                        1.366537,0.924127,2.849465,0.00,    //FR
-                                        2.975827,6.062500,0.729456,0.00,    //RL
-                                        1.336193,4.610954,3.986959,0.00,};  //RR
+  // 顺序：右前（FR）髋-大腿-膝-轮 -> 左前（FL） -> 右后（RR） -> 左后（RL）
+  std::array<double,16> init_offset = { 3.861508,3.218195,0.872212,0.00,    // 左前（FL） 
+                                        1.366537,0.924127,2.849465,0.00,    // 右前（FR）
+                                        2.975827,6.062500,0.729456,0.00,    // 左后（RL）
+                                        1.336193,4.610954,3.986959,0.00,};  // 右后（RR）
 
-  std::array<double,16> joint_offset = {0.0,0.580027778,-1.64361556,0.0,//FL
-                                        0.0,-0.580027778,1.64361556,0.0,//FR
-                                        0.0,0.580027778,-1.64361556,0.0,//RL
-                                        0.0,-0.580027778,1.64361556,0.0,//RR
+  std::array<double,16> joint_offset = {0.0,0.580027778,-1.64361556,0.0,// 左前（FL）
+                                        0.0,-0.580027778,1.64361556,0.0,// 右前（FR）
+                                        0.0,0.580027778,-1.64361556,0.0,// 左后（RL）
+                                        0.0,-0.580027778,1.64361556,0.0,// 右后（RR）
                                           };
 
-  std::array<double,16> direction = { 1.0, 1.0, 1.0, 1.0,  //FL
-                                      1.0, 1.0, 1.0,-1.0,  //FR
-                                      1.0, 1.0, 1.0, 1.0,  //RL
-                                      1.0, 1.0, 1.0,-1.0}; //RR
+  std::array<double,16> direction = { 1.0, 1.0, 1.0, 1.0,  // 左前（FL）
+                                      1.0, 1.0, 1.0,-1.0,  // 右前（FR）
+                                      1.0, 1.0, 1.0, 1.0,  // 左后（RL）
+                                      1.0, 1.0, 1.0,-1.0}; // 右后（RR）
   
   // for(int i=0;i<16;i++){
   //   joint_position_command_[i]=0;
@@ -339,12 +337,12 @@ hardware_interface::return_type MdogHardwareInterface::write(
   // joint_kd_command_[8] = 0; //8 9 10 11
   // joint_kd_command_[13] = 0; //12 13 14 15
 
-  // print all joint position cmd
+  // 打印所有关节位置指令
   // for (int i = 0; i < 16; ++i){
   //   RCLCPP_INFO(rclcpp::get_logger("MdogHardwareInterface"), "joint_position_cmd_[%d]: %f", i, joint_position_command_[i]);
   // }                                       
 
-  //FL
+  // 左前（FL）
   int j = 0;
   for(int i=0;i<4;i++){
     motorCMD_msg.motor_cmd[j].mode = 1;
@@ -361,7 +359,7 @@ hardware_interface::return_type MdogHardwareInterface::write(
   // RCLCPP_INFO(rclcpp::get_logger("MdogHardwareInterface"), "joint_position_cmd_[1]: %f", motorCMD_msg.motor_cmd[1].q);
   // RCLCPP_INFO(rclcpp::get_logger("MdogHardwareInterface"), "joint_kp_cmd_[1]: %f", motorCMD_msg.motor_cmd[1].kp);
   
-  //FR
+  // 右前（FR）
   j = 8;
   for(int i=4;i<8;i++){
     motorCMD_msg.motor_cmd[j].mode = 1;
@@ -375,7 +373,7 @@ hardware_interface::return_type MdogHardwareInterface::write(
   }
   motorCMD_msg.motor_cmd[11].q = 0;
 
-  //RL
+  // 左后（RL）
   j=12;
   for(int i=8;i<12;i++){
     motorCMD_msg.motor_cmd[j].mode = 1;
@@ -389,7 +387,7 @@ hardware_interface::return_type MdogHardwareInterface::write(
   }
   motorCMD_msg.motor_cmd[15].q = 0;
 
-  //RR
+  // 右后（RR）
   j=4;
   for(int i=12;i<16;i++){
     motorCMD_msg.motor_cmd[j].mode = 1;
@@ -413,7 +411,7 @@ hardware_interface::return_type MdogHardwareInterface::write(
   // RCLCPP_INFO(rclcpp::get_logger("MdogHardwareInterface"), "motor_cmd[1].kp: %f", joint_kp_command_[1]);
   // RCLCPP_INFO(rclcpp::get_logger("MdogHardwareInterface"), "motor_cmd[1].kd: %f", joint_kd_command_[1]);
 
-  // print all the kd
+  // 打印所有关节的 kd
   // for (int i = 0; i < 16; ++i){
   //   RCLCPP_INFO(rclcpp::get_logger("MdogHardwareInterface"), "motor_cmd[%d].kd: %f", i, motorCMD_msg.motor_cmd[i].kd);
   // }
@@ -442,7 +440,7 @@ void MdogHardwareInterface::imu_callback(const sensor_msgs::msg::Imu::SharedPtr 
   imu_states_buffer_[7] = msg->linear_acceleration.x;
   imu_states_buffer_[8] = msg->linear_acceleration.y;
   imu_states_buffer_[9] = msg->linear_acceleration.z;
-  // RCLCPP_INFO(rclcpp::get_logger("MdogHardwareInterface"), "get IMU data...");
+  // RCLCPP_INFO(rclcpp::get_logger("MdogHardwareInterface"), "获取 IMU 数据...");
 }
 
 void MdogHardwareInterface::low_state_callback(const pd_interfaces::msg::LowState::SharedPtr msg){
@@ -457,10 +455,10 @@ void MdogHardwareInterface::low_state_callback(const pd_interfaces::msg::LowStat
     }
 
     if (init_flag == 0){
-        wheel_init_pos_[0] = joint_position_temp_[3];//FL
-        wheel_init_pos_[1] = joint_position_temp_[11];//FR
-        wheel_init_pos_[2] = joint_position_temp_[15];//RL
-        wheel_init_pos_[3] = joint_position_temp_[7];//RR
+        wheel_init_pos_[0] = joint_position_temp_[3];// 左前（FL）
+        wheel_init_pos_[1] = joint_position_temp_[11];// 右前（FR）
+        wheel_init_pos_[2] = joint_position_temp_[15];// 左后（RL）
+        wheel_init_pos_[3] = joint_position_temp_[7];// 右后（RR）
         init_flag = 1;
     }
     // for (int i=0; i<16; i++){

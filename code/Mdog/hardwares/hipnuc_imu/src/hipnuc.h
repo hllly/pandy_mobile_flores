@@ -15,22 +15,22 @@ extern "C"{
 #pragma pack(1)
 #endif
 
-#define CHSYNC1                 (0x5A)              /* CHAOHE message sync code 1 */
-#define CHSYNC2                 (0xA5)              /* CHAOHE message sync code 2 */
-#define CH_HDR_SIZE             (0x06)          /* CHAOHE protocol header size */
+#define CHSYNC1                 (0x5A)              /* 超和协议同步码 1 */
+#define CHSYNC2                 (0xA5)              /* 超和协议同步码 2 */
+#define CH_HDR_SIZE             (0x06)          /* 超和协议报文头大小 */
 #define HIPNUC_MAX_RAW_SIZE     (128+CH_HDR_SIZE)
 
 
 /**
-* packet 0x91: IMU data(floating point)
+* 数据包 0x91：IMU 数据（浮点格式）
  */
 typedef struct __attribute__((__packed__))
 {
-    uint8_t         tag; /* data packet tag, if tag = 0x00, means that this packet is null */
+    uint8_t         tag; /* 数据包标识，若为 0x00 表示该包无效 */
     uint16_t        pps_sync_ms;
     int8_t          temp;
     float           prs;
-    uint32_t        ts; /* timestamp */
+    uint32_t        ts; /* 时间戳 */
     float           acc[3];
     float           gyr[3];
     float           mag[3];
@@ -41,7 +41,7 @@ typedef struct __attribute__((__packed__))
 } hi91_t;
 
 /**
-* packet 0x92: IMU data(int type)
+* 数据包 0x92：IMU 数据（整数格式）
  */
 typedef struct __attribute__((__packed__))
 {
@@ -61,7 +61,7 @@ typedef struct __attribute__((__packed__))
 } hi92_t;
 
 /**
-* packet 0x81: INS data, include lat, lon, eul, quat, raw IMU data 
+* 数据包 0x81：INS 数据，包含经纬度、欧拉角、四元数及原始 IMU 数据 
  */
 typedef struct __attribute__((__packed__))
 {
@@ -111,12 +111,12 @@ typedef struct __attribute__((__packed__))
 
 typedef struct
 {
-    int nbyte;                          /* number of bytes in message buffer */ 
-    int len;                            /* message length (bytes) */
-    uint8_t buf[HIPNUC_MAX_RAW_SIZE];   /* message raw buffer */
+    int nbyte;                          /* 消息缓冲区中的字节数 */ 
+    int len;                            /* 消息长度（字节） */
+    uint8_t buf[HIPNUC_MAX_RAW_SIZE];   /* 消息原始缓冲区 */
     hi91_t hi91;
-    hi92_t hi92;
-    hi81_t hi81;
+   hi92_t hi92;
+   hi81_t hi81;
 }hipnuc_raw_t;
 
 #ifdef QT_CORE_LIB
@@ -132,5 +132,4 @@ int hipnuc_dump_packet(hipnuc_raw_t *raw, char *buf, size_t buf_size);
 
 
 #endif
-
 

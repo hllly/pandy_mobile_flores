@@ -1,5 +1,5 @@
 //
-// Created by biao on 24-10-6.
+// 由 pj 于 24-10-6 创建。
 //
 
 #include "ObservationBuffer.h"
@@ -23,7 +23,7 @@ void ObservationBuffer::reset(const std::vector<int> &reset_index, const torch::
 }
 
 void ObservationBuffer::insert(const torch::Tensor &new_obs) {
-    // Shift observations back.
+    // 将历史观测整体向后移动
     const torch::Tensor shifted_obs = obs_buffer_.index({
         torch::indexing::Slice(torch::indexing::None), torch::indexing::Slice(num_obs_, num_obs_ * include_history_steps_)
     }).clone();
@@ -31,7 +31,7 @@ void ObservationBuffer::insert(const torch::Tensor &new_obs) {
         torch::indexing::Slice(torch::indexing::None), torch::indexing::Slice(0, num_obs_ * (include_history_steps_ - 1))
     }) = shifted_obs;
 
-    // Add new observation.
+    // 写入最新观测
     obs_buffer_.index({
         torch::indexing::Slice(torch::indexing::None), torch::indexing::Slice(-num_obs_, torch::indexing::None)
     }) = new_obs;

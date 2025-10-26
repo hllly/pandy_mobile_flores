@@ -8,14 +8,14 @@
 #include "chry_ringbuffer.h"
 
 /*****************************************************************************
-* @brief        init ringbuffer
+* @brief        初始化环形缓冲区
 * 
-* @param[in]    rb          ringbuffer instance
-* @param[in]    pool        memory pool address
-* @param[in]    size        memory size in byte,
-*                           must be power of 2 !!!
+* @param[in]    rb          环形缓冲区实例
+* @param[in]    pool        内存池地址
+* @param[in]    size        内存大小（字节），
+*                           必须是 2 的幂
 * 
-* @retval int               0:Success -1:Error
+* @retval int               0：成功 -1：错误
 *****************************************************************************/
 int chry_ringbuffer_init(chry_ringbuffer_t *rb, void *pool, uint32_t size)
 {
@@ -40,10 +40,10 @@ int chry_ringbuffer_init(chry_ringbuffer_t *rb, void *pool, uint32_t size)
 }
 
 /*****************************************************************************
-* @brief        reset ringbuffer, clean all data, 
-*               should be add lock in multithread
+* @brief        重置环形缓冲区并清空所有数据，
+*               多线程环境下应加锁
 * 
-* @param[in]    rb          ringbuffer instance
+* @param[in]    rb          环形缓冲区实例
 * 
 *****************************************************************************/
 void chry_ringbuffer_reset(chry_ringbuffer_t *rb)
@@ -53,11 +53,11 @@ void chry_ringbuffer_reset(chry_ringbuffer_t *rb)
 }
 
 /*****************************************************************************
-* @brief        reset ringbuffer, clean all data,
-*               should be add lock in multithread,
-*               in single read thread not need lock
+* @brief        重置环形缓冲区的读指针并清空数据，
+*               多线程环境下应加锁，
+*               单读线程可无需锁
 * 
-* @param[in]    rb          ringbuffer instance
+* @param[in]    rb          环形缓冲区实例
 * 
 *****************************************************************************/
 void chry_ringbuffer_reset_read(chry_ringbuffer_t *rb)
@@ -66,11 +66,11 @@ void chry_ringbuffer_reset_read(chry_ringbuffer_t *rb)
 }
 
 /*****************************************************************************
-* @brief        get ringbuffer total size in byte
+* @brief        获取环形缓冲区的总容量（字节）
 * 
-* @param[in]    rb          ringbuffer instance
+* @param[in]    rb          环形缓冲区实例
 * 
-* @retval uint32_t          total size in byte
+* @retval uint32_t          总容量（字节）
 *****************************************************************************/
 uint32_t chry_ringbuffer_get_size(chry_ringbuffer_t *rb)
 {
@@ -78,11 +78,11 @@ uint32_t chry_ringbuffer_get_size(chry_ringbuffer_t *rb)
 }
 
 /*****************************************************************************
-* @brief        get ringbuffer used size in byte
+* @brief        获取环形缓冲区已使用空间（字节）
 * 
-* @param[in]    rb          ringbuffer instance
+* @param[in]    rb          环形缓冲区实例
 * 
-* @retval uint32_t          used size in byte
+* @retval uint32_t          已使用空间（字节）
 *****************************************************************************/
 uint32_t chry_ringbuffer_get_used(chry_ringbuffer_t *rb)
 {
@@ -90,11 +90,11 @@ uint32_t chry_ringbuffer_get_used(chry_ringbuffer_t *rb)
 }
 
 /*****************************************************************************
-* @brief        get ringbuffer free size in byte
+* @brief        获取环形缓冲区剩余空间（字节）
 * 
-* @param[in]    rb          ringbuffer instance
+* @param[in]    rb          环形缓冲区实例
 * 
-* @retval uint32_t          free size in byte
+* @retval uint32_t          剩余空间（字节）
 *****************************************************************************/
 uint32_t chry_ringbuffer_get_free(chry_ringbuffer_t *rb)
 {
@@ -102,12 +102,12 @@ uint32_t chry_ringbuffer_get_free(chry_ringbuffer_t *rb)
 }
 
 /*****************************************************************************
-* @brief        check if ringbuffer is full
+* @brief        检查环形缓冲区是否已满
 * 
-* @param[in]    rb          ringbuffer instance
+* @param[in]    rb          环形缓冲区实例
 * 
-* @retval true              full
-* @retval false             not full
+* @retval true              已满
+* @retval false             未满
 *****************************************************************************/
 bool chry_ringbuffer_check_full(chry_ringbuffer_t *rb)
 {
@@ -115,12 +115,12 @@ bool chry_ringbuffer_check_full(chry_ringbuffer_t *rb)
 }
 
 /*****************************************************************************
-* @brief        check if ringbuffer is empty
+* @brief        检查环形缓冲区是否为空
 * 
-* @param[in]    rb          ringbuffer instance
+* @param[in]    rb          环形缓冲区实例
 * 
-* @retval true              empty
-* @retval false             not empty
+* @retval true              为空
+* @retval false             非空
 *****************************************************************************/
 bool chry_ringbuffer_check_empty(chry_ringbuffer_t *rb)
 {
@@ -128,15 +128,15 @@ bool chry_ringbuffer_check_empty(chry_ringbuffer_t *rb)
 }
 
 /*****************************************************************************
-* @brief        write one byte to ringbuffer,
-*               should be add lock in multithread,
-*               in single write thread not need lock
+* @brief        写入一个字节，
+*               多线程写入需加锁，
+*               单写线程可无需锁
 * 
-* @param[in]    rb          ringbuffer instance
-* @param[in]    byte        data
+* @param[in]    rb          环形缓冲区实例
+* @param[in]    byte        待写入数据
 * 
-* @retval true              Success
-* @retval false             ringbuffer is full
+* @retval true              写入成功
+* @retval false             环形缓冲区已满
 *****************************************************************************/
 bool chry_ringbuffer_write_byte(chry_ringbuffer_t *rb, uint8_t byte)
 {
@@ -150,14 +150,14 @@ bool chry_ringbuffer_write_byte(chry_ringbuffer_t *rb, uint8_t byte)
 }
 
 /*****************************************************************************
-* @brief        overwrite one byte to ringbuffer, drop oldest data,
-*               should be add lock always
+* @brief        覆写一个字节，并丢弃最旧的数据，
+*               始终需要加锁
 *
-* @param[in]    rb          ringbuffer instance
-* @param[in]    byte        data
+* @param[in]    rb          环形缓冲区实例
+* @param[in]    byte        待写入数据
 * 
-* @retval true              Success
-* @retval false             always return true
+* @retval true              写入成功
+* @retval false             始终返回 true
 *****************************************************************************/
 bool chry_ringbuffer_overwrite_byte(chry_ringbuffer_t *rb, uint8_t byte)
 {
@@ -171,15 +171,15 @@ bool chry_ringbuffer_overwrite_byte(chry_ringbuffer_t *rb, uint8_t byte)
 }
 
 /*****************************************************************************
-* @brief        peek one byte from ringbuffer,
-*               should be add lock in multithread,
-*               in single read thread not need lock
+* @brief        预读一个字节，
+*               多线程读取需加锁，
+*               单读线程可无需锁
 * 
-* @param[in]    rb          ringbuffer instance
-* @param[in]    byte        pointer to save data
+* @param[in]    rb          环形缓冲区实例
+* @param[in]    byte        保存数据的指针
 * 
-* @retval true              Success
-* @retval false             ringbuffer is empty
+* @retval true              读取成功
+* @retval false             环形缓冲区为空
 *****************************************************************************/
 bool chry_ringbuffer_peek_byte(chry_ringbuffer_t *rb, uint8_t *byte)
 {
@@ -192,15 +192,15 @@ bool chry_ringbuffer_peek_byte(chry_ringbuffer_t *rb, uint8_t *byte)
 }
 
 /*****************************************************************************
-* @brief        read one byte from ringbuffer,
-*               should be add lock in multithread,
-*               in single read thread not need lock
+* @brief        读取一个字节，
+*               多线程读取需加锁，
+*               单读线程可无需锁
 * 
-* @param[in]    rb          ringbuffer instance
-* @param[in]    byte        pointer to save data
+* @param[in]    rb          环形缓冲区实例
+* @param[in]    byte        保存数据的指针
 * 
-* @retval true              Success
-* @retval false             ringbuffer is empty
+* @retval true              读取成功
+* @retval false             环形缓冲区为空
 *****************************************************************************/
 bool chry_ringbuffer_read_byte(chry_ringbuffer_t *rb, uint8_t *byte)
 {
@@ -211,14 +211,14 @@ bool chry_ringbuffer_read_byte(chry_ringbuffer_t *rb, uint8_t *byte)
 }
 
 /*****************************************************************************
-* @brief        drop one byte from ringbuffer,
-*               should be add lock in multithread,
-*               in single read thread not need lock
+* @brief        丢弃环形缓冲区中的一个字节，
+*               多线程读取需加锁，
+*               单读线程可无需锁
 * 
-* @param[in]    rb          ringbuffer instance
+* @param[in]    rb          环形缓冲区实例
 * 
-* @retval true              Success
-* @retval false             ringbuffer is empty
+* @retval true              操作成功
+* @retval false             环形缓冲区为空
 *****************************************************************************/
 bool chry_ringbuffer_drop_byte(chry_ringbuffer_t *rb)
 {
@@ -231,15 +231,15 @@ bool chry_ringbuffer_drop_byte(chry_ringbuffer_t *rb)
 }
 
 /*****************************************************************************
-* @brief        write data to ringbuffer,
-*               should be add lock in multithread,
-*               in single write thread not need lock
+* @brief        向环形缓冲区写入数据，
+*               多线程写入需加锁，
+*               单写线程可无需锁
 * 
-* @param[in]    rb          ringbuffer instance
-* @param[in]    data        data pointer
-* @param[in]    size        size in byte
+* @param[in]    rb          环形缓冲区实例
+* @param[in]    data        数据指针
+* @param[in]    size        数据长度（字节）
 * 
-* @retval uint32_t          actual write size in byte
+* @retval uint32_t          实际写入的字节数
 *****************************************************************************/
 uint32_t chry_ringbuffer_write(chry_ringbuffer_t *rb, void *data, uint32_t size)
 {
@@ -267,14 +267,14 @@ uint32_t chry_ringbuffer_write(chry_ringbuffer_t *rb, void *data, uint32_t size)
 }
 
 /*****************************************************************************
-* @brief        write data to ringbuffer,
-*               should be add lock always
+* @brief        向环形缓冲区写入数据（会覆写最旧数据），
+*               始终需要加锁
 * 
-* @param[in]    rb          ringbuffer instance
-* @param[in]    data        data pointer
-* @param[in]    size        size in byte
+* @param[in]    rb          环形缓冲区实例
+* @param[in]    data        数据指针
+* @param[in]    size        数据长度（字节）
 * 
-* @retval uint32_t          actual write size in byte
+* @retval uint32_t          实际写入的字节数
 *****************************************************************************/
 uint32_t chry_ringbuffer_overwrite(chry_ringbuffer_t *rb, void *data, uint32_t size)
 {
@@ -306,15 +306,15 @@ uint32_t chry_ringbuffer_overwrite(chry_ringbuffer_t *rb, void *data, uint32_t s
 }
 
 /*****************************************************************************
-* @brief        peek data from ringbuffer
-*               should be add lock in multithread,
-*               in single read thread not need lock
+* @brief        预读环形缓冲区的数据，
+*               多线程读取需加锁，
+*               单读线程可无需锁
 * 
-* @param[in]    rb          ringbuffer instance
-* @param[in]    data        data pointer
-* @param[in]    size        size in byte
+* @param[in]    rb          环形缓冲区实例
+* @param[in]    data        数据指针
+* @param[in]    size        读取长度（字节）
 * 
-* @retval uint32_t          actual peek size in byte
+* @retval uint32_t          实际预读的字节数
 *****************************************************************************/
 uint32_t chry_ringbuffer_peek(chry_ringbuffer_t *rb, void *data, uint32_t size)
 {
@@ -339,15 +339,15 @@ uint32_t chry_ringbuffer_peek(chry_ringbuffer_t *rb, void *data, uint32_t size)
 }
 
 /*****************************************************************************
-* @brief        read data from ringbuffer
-*               should be add lock in multithread,
-*               in single read thread not need lock
+* @brief        从环形缓冲区读取数据，
+*               多线程读取需加锁，
+*               单读线程可无需锁
 * 
-* @param[in]    rb          ringbuffer instance
-* @param[in]    data        data pointer
-* @param[in]    size        size in byte
+* @param[in]    rb          环形缓冲区实例
+* @param[in]    data        数据指针
+* @param[in]    size        读取长度（字节）
 * 
-* @retval uint32_t          actual read size in byte
+* @retval uint32_t          实际读取的字节数
 *****************************************************************************/
 uint32_t chry_ringbuffer_read(chry_ringbuffer_t *rb, void *data, uint32_t size)
 {
@@ -357,14 +357,14 @@ uint32_t chry_ringbuffer_read(chry_ringbuffer_t *rb, void *data, uint32_t size)
 }
 
 /*****************************************************************************
-* @brief        drop data from ringbuffer
-*               should be add lock in multithread,
-*               in single read thread not need lock
+* @brief        丢弃环形缓冲区中的数据，
+*               多线程读取需加锁，
+*               单读线程可无需锁
 * 
-* @param[in]    rb          ringbuffer instance
-* @param[in]    size        size in byte
+* @param[in]    rb          环形缓冲区实例
+* @param[in]    size        丢弃长度（字节）
 * 
-* @retval uint32_t          actual drop size in byte
+* @retval uint32_t          实际丢弃的字节数
 *****************************************************************************/
 uint32_t chry_ringbuffer_drop(chry_ringbuffer_t *rb, uint32_t size)
 {
@@ -380,12 +380,12 @@ uint32_t chry_ringbuffer_drop(chry_ringbuffer_t *rb, uint32_t size)
 }
 
 /*****************************************************************************
-* @brief        linear write setup, get write pointer and max linear size.
+* @brief        配置线性写入，获取写指针与最大连续空间
 *               
-* @param[in]    rb          ringbuffer instance
-* @param[in]    size        pointer to store max linear size in byte
+* @param[in]    rb          环形缓冲区实例
+* @param[in]    size        保存最大连续空间（字节）的指针
 * 
-* @retval void*             write memory pointer
+* @retval void*             可写入的内存指针
 *****************************************************************************/
 void *chry_ringbuffer_linear_write_setup(chry_ringbuffer_t *rb, uint32_t *size)
 {
@@ -410,12 +410,12 @@ void *chry_ringbuffer_linear_write_setup(chry_ringbuffer_t *rb, uint32_t *size)
 }
 
 /*****************************************************************************
-* @brief        linear read setup, get read pointer and max linear size.
+* @brief        配置线性读取，获取读指针与最大连续空间
 * 
-* @param[in]    rb          ringbuffer instance
-* @param[in]    size        pointer to store max linear size in byte
+* @param[in]    rb          环形缓冲区实例
+* @param[in]    size        保存最大连续空间（字节）的指针
 * 
-* @retval void*             
+* @retval void*             可读取的内存指针
 *****************************************************************************/
 void *chry_ringbuffer_linear_read_setup(chry_ringbuffer_t *rb, uint32_t *size)
 {
@@ -440,12 +440,12 @@ void *chry_ringbuffer_linear_read_setup(chry_ringbuffer_t *rb, uint32_t *size)
 }
 
 /*****************************************************************************
-* @brief        linear write done, add write pointer only
+* @brief        完成线性写入，仅推进写指针
 * 
-* @param[in]    rb          ringbuffer instance
-* @param[in]    size        write size in byte
+* @param[in]    rb          环形缓冲区实例
+* @param[in]    size        写入长度（字节）
 * 
-* @retval uint32_t          actual write size in byte
+* @retval uint32_t          实际写入的字节数
 *****************************************************************************/
 uint32_t chry_ringbuffer_linear_write_done(chry_ringbuffer_t *rb, uint32_t size)
 {
@@ -461,12 +461,12 @@ uint32_t chry_ringbuffer_linear_write_done(chry_ringbuffer_t *rb, uint32_t size)
 }
 
 /*****************************************************************************
-* @brief        linear read done, add read pointer only
+* @brief        完成线性读取，仅推进读指针
 * 
-* @param[in]    rb          ringbuffer instance
-* @param[in]    size        read size in byte
+* @param[in]    rb          环形缓冲区实例
+* @param[in]    size        读取长度（字节）
 * 
-* @retval uint32_t          actual read size in byte
+* @retval uint32_t          实际读取的字节数
 *****************************************************************************/
 uint32_t chry_ringbuffer_linear_read_done(chry_ringbuffer_t *rb, uint32_t size)
 {

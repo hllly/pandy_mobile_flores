@@ -15,10 +15,10 @@ extern "C" {
 #include <stdbool.h>
 
 typedef struct {
-    uint32_t in;   /*!< Define the write pointer.               */
-    uint32_t out;  /*!< Define the read pointer.                */
-    uint32_t mask; /*!< Define the write and read pointer mask. */
-    void *pool;    /*!< Define the memory pointer.              */
+    uint32_t in;   /*!< 写指针。               */
+    uint32_t out;  /*!< 读指针。                */
+    uint32_t mask; /*!< 读写指针的掩码。 */
+    void *pool;    /*!< 内存池指针。              */
 } chry_ringbuffer_t;
 
 extern int chry_ringbuffer_init(chry_ringbuffer_t *rb, void *pool, uint32_t size);

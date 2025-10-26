@@ -1,5 +1,5 @@
 //
-// Created by biao on 24-10-6.
+// 由 pj 于 24-10-6 创建。
 //
 
 #ifndef STATERL_H
@@ -17,14 +17,14 @@ void executeAndSleep(Functor f, const double frequency) {
     using clock = std::chrono::high_resolution_clock;
     const auto start = clock::now();
 
-    // Execute wrapped function
+    // 执行封装的函数
     f();
 
-    // Compute desired duration rounded to clock decimation
+    // 计算经过取整后的目标持续时间
     const std::chrono::duration<double> desiredDuration(1.0 / frequency);
     const auto dt = std::chrono::duration_cast<clock::duration>(desiredDuration);
 
-    // Sleep
+    // 休眠
     const auto sleepTill = start + dt;
     std::this_thread::sleep_until(sleepTill);
 }
@@ -33,15 +33,15 @@ void executeAndSleep(Functor f, const double frequency) {
 //     using clock = std::chrono::high_resolution_clock;
 //     const auto start = clock::now();
 
-//     // Compute desired duration rounded to clock decimation
+//     // 计算经过取整的目标持续时间
 //     const std::chrono::duration<double> desiredDuration(0.95 / frequency);
 //     const auto dt = std::chrono::duration_cast<clock::duration>(desiredDuration);
 
-//     // Sleep
+//     // 休眠
 //     const auto sleepTill = start + dt;
 //     std::this_thread::sleep_until(sleepTill);
 //     const auto f_start = clock::now();
-//     // Execute wrapped function
+//     // 执行封装的函数
 //     f();
 //     const auto f_end =clock::now();
 //     const std::chrono::duration<double> desiredDuration1(0.05 / frequency);
@@ -52,14 +52,14 @@ void executeAndSleep(Functor f, const double frequency) {
 //         const auto sleep_until1 = clock::now() + sleep_duration;
 //         std::this_thread::sleep_until(sleep_until1);
 //     }
-//     // std::cout << "time!!!!!!!!!!! " 
-//     //       << 1/std::chrono::duration_cast<std::chrono::duration<double>>(clock::now() - start).count() 
-//     //       << " seconds" << std::endl;
+//     // std::cout << "时间!!!!!!!!!!! "
+//     //       << 1/std::chrono::duration_cast<std::chrono::duration<double>>(clock::now() - start).count()
+//     //       << " 秒" << std::endl;
 
-//         //   std::cout << "fffffftime!!!!!!!!!!! " 
-//         //   << 1.0/std::chrono::duration_cast<std::chrono::duration<double>>(f_duration).count() 
-//         //   << " seconds" << std::endl;
-   
+//         //   std::cout << "执行时间!!!!!!!!!!! "
+//         //   << 1.0/std::chrono::duration_cast<std::chrono::duration<double>>(f_duration).count()
+//         //   << " 秒" << std::endl;
+
 // }
 
 template<typename T>
@@ -76,7 +76,7 @@ struct RobotCommand {
 template<typename T>
 struct RobotState {
     struct IMU {
-        std::vector<T> quaternion = {1.0, 0.0, 0.0, 0.0}; // w, x, y, z
+        std::vector<T> quaternion = {1.0, 0.0, 0.0, 0.0}; // 分量顺序：w, x, y, z
         std::vector<T> gyroscope = {0.0, 0.0, 0.0};
         std::vector<T> accelerometer = {0.0, 0.0, 0.0};
     } imu;
@@ -158,7 +158,7 @@ private:
     static torch::Tensor quatRotateInverse(const torch::Tensor &q, const torch::Tensor& v, const std::string& framework);
 
     /**
-    * @brief Forward the RL model to get the action
+    * @brief 前向推理强化学习模型以获取动作
     */
     torch::Tensor forward();
 
@@ -170,7 +170,7 @@ private:
 
     void publishDebug();
 
-    // Parameters
+    // 参数配置
     ModelParams params_;
     Observations obs_;
     Control control_;
@@ -179,22 +179,22 @@ private:
     RobotState<double> robot_state_;
     RobotCommand<double> robot_command_;
 
-    // history buffer
+    // 历史观测缓冲区
     std::shared_ptr<ObservationBuffer> history_obs_buf_;
     torch::Tensor history_obs_;
 
-    // rl module
+    // 强化学习推理模块
     torch::jit::script::Module model_;
     std::thread rl_thread_;
     bool running_ = false;
     bool updated_ = false;
 
-    // output buffer
+    // 输出缓存
     torch::Tensor output_torques;
     torch::Tensor output_dof_pos_;
     torch::Tensor output_dof_vel_;
 
-    //debug publisher
+    // 调试信息发布器
     std::shared_ptr<rclcpp::Node> node_;
     rclcpp::Publisher<pd_interfaces::msg::RlTest>::SharedPtr rl_test_publisher_ = nullptr;
     pd_interfaces::msg::RlTest msg;

@@ -1,5 +1,5 @@
 //
-// Created by biao on 24-9-18.
+// 由 pj 于 24-9-18 创建。
 //
 
 #include "unitree_guide_controller/gait/FeetEndCalc.h"
@@ -19,7 +19,7 @@ void FeetEndCalc::init() {
     t_swing_ = ctrl_component_.wave_generator_->get_t_swing();
 
     Vec34 feet_pos_body = estimator_->getFeetPos2Body();
-    // Vec34 feet_pos_body = robot_model_.feet_pos_normal_stand_;
+    // 如需使用默认站立姿态，可直接取 robot_model_.feet_pos_normal_stand_。
     for (int i(0); i < 4; ++i) {
         feet_radius_(i) =
                 sqrt(pow(feet_pos_body(0, i), 2) + pow(feet_pos_body(1, i), 2));

@@ -1,5 +1,5 @@
 //
-// Created by biao on 24-7-1.
+// 由 pj 于 24-7-1 创建。
 //
 
 #ifndef STAND_GO2_CRC32_H

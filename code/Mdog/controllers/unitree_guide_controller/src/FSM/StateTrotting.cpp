@@ -1,5 +1,5 @@
 //
-// Created by tlab-uav on 24-9-18.
+// 由 pj 于 24-9-18 创建。
 //
 
 #include "unitree_guide_controller/FSM/StateTrotting.h"
@@ -79,19 +79,19 @@ FSMStateName StateTrotting::checkChange() {
 }
 
 void StateTrotting::getUserCmd() {
-    /* Movement */
+    /* 平移动作 */
     v_cmd_body_(0) = invNormalize(ctrl_comp_.control_inputs_.ly, v_x_limit_(0), v_x_limit_(1));
     v_cmd_body_(1) = -invNormalize(ctrl_comp_.control_inputs_.lx, v_y_limit_(0), v_y_limit_(1));
     v_cmd_body_(2) = 0;
 
-    /* Turning */
+    /* 转向动作 */
     d_yaw_cmd_ = -invNormalize(ctrl_comp_.control_inputs_.rx, w_yaw_limit_(0), w_yaw_limit_(1));
     d_yaw_cmd_ = 0.9 * d_yaw_cmd_past_ + (1 - 0.9) * d_yaw_cmd_;
     d_yaw_cmd_past_ = d_yaw_cmd_;
 }
 
 void StateTrotting::calcCmd() {
-    /* Movement */
+    /* 平移动作 */
     vel_target_ = B2G_RotMat * v_cmd_body_;
 
     vel_target_(0) =
@@ -106,7 +106,7 @@ void StateTrotting::calcCmd() {
 
     vel_target_(2) = 0;
 
-    /* Turning */
+    /* 转向动作 */
     yaw_cmd_ = yaw_cmd_ + d_yaw_cmd_ * dt_;
     Rd = rotz(yaw_cmd_);
     w_cmd_global_(2) = d_yaw_cmd_;
@@ -175,13 +175,13 @@ void StateTrotting::calcQQd() {
 void StateTrotting::calcGain() const {
     for (int i(0); i < 4; ++i) {
         if (wave_generator_->contact_(i) == 0) {
-            // swing gain
+            // 摆动相增益
             for (int j = 0; j < 3; j++) {
                 ctrl_comp_.joint_kp_command_interface_[i * 3 + j].get().set_value(3);
                 ctrl_comp_.joint_kd_command_interface_[i * 3 + j].get().set_value(2);
             }
         } else {
-            // stable gain
+            // 支撑相增益
             for (int j = 0; j < 3; j++) {
                 ctrl_comp_.joint_kp_command_interface_[i * 3 + j].get().set_value(0.8);
                 ctrl_comp_.joint_kd_command_interface_[i * 3 + j].get().set_value(0.8);
