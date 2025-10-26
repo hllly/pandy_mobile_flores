@@ -1,6 +1,6 @@
-# FLORES 项目说明
+# pandy_mobile 项目说明
 
-FLORES（Flexible Legged Off-road Robot for Enhanced Steering）是一款可重构的轮足式机器人，通过机械结构调整和强化学习控制，提高复杂地形下的机动性、避障与转向能力。本仓库聚焦于 ROS 2 控制栈、强化学习控制器以及仿真/实物对接方案，配合机械与硬件资料共同支撑 FLORES 的研发。
+pandy_mobile是一款基于一些开源实现二次开发的轮足式机器人，通过机械结构调整和引入强化学习控制，提高复杂地形下的机动性、避障与转向能力。本仓库聚焦于 ROS 2 控制栈、强化学习控制器以及仿真/实物对接方案，配合机械与硬件资料共同支撑研发。
 
 ## 项目定位与现状
 - 机械侧提供可折叠轮足、12 个关节 + 4 个轮端的自由度设计，并给出 CNC 可制造零件 (`Mechanical/`) 与硬件 BOM（`fig/Hardware_Device_List.png`）。
